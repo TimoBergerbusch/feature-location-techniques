@@ -7,12 +7,32 @@
 In this chapter we want to look at four different feature location techniques in detail. We choose two static and two dynamic techniques with each one technique giving plain and one giving guided output.
 
 \section{Static - Plain}
-This could be one of the following techniques:
-\begin{itemize}
-\item CLDS - Chen et al.
-\item Find-Concept - Wlakinshaw at al.
-\item SNIAFL - Zhao et al. (recommended)
-\end{itemize}
+As an example of a static technique with plain output the \emph{Find-concept (short FC)} of David Shepherd, Emily Hill, K. Vijay-Shanker and Lori Pollock of the University of Delaware and also Martin P. Robillard of the McGill University in Canada is a reasonable choice
+The technique makes, as previously mentioned in Chapter \ref{ch:Classification and Methodology}, some assumptions to the underlying code. To apply \emph{FC} the code has to be object-oriented, the comments and identifiers, which are objects and methods, have to be named in a way so that the technique can retrieve domain knowledge. Also it makes the premise that verbs correspond to methods and nouns refer to objects. Also FC defines so called \textit{direct objects}, which are objects corresponding to a verb. In our example the verb $save$ corresponds to $MindMapMapModel$, $MindMapNodeModel$ and $MindMapEdgeModel$, which are therefore the direct objects of $save$.\newline
+\emptyLine
+The input to the FC is given by the user as a query of description phrases of the feature of interest and after that decomposed into a set of \textit{verb-DO} pairs. In order to improve the result the technique collects related words,like synonyms or verbs in different time forms, and also regards words, which are often mentioned in the context of words from the query. These collected words then get ranked by their similarity to the query words with for example LSI \ref{ch:lsi}, calculating with a variable weight for the synonyms, and the ten most analogous are presented to the user to augment the query with these terms and program methods already matching to the current query.\newline
+\emptyLine
+The important aspect the user wants to retrieve are the \textit{verb-DO} pairs matching the query. To be able to derive the matching pairs the FC builds an \textit{action-oriented identifier graph model (AOIG)}. The \textit{AOIG} contains four kinds of nodes and 2 types of edges:
+\vspace{3em} %WARNING: smay be shitty
+
+\begin{table}[th]
+	\begin{tabular}{r l}
+		\textit{verb nodes}: & a node for each specific verb/action \\
+		\textit{direct object (DO) nodes}: & a node for each direct object \\
+		\textit{verb-DO nodes}: & a node for every \textit{verb-Do} pair. (A \textit{DO} can be in multiple \textit{verb-DO} nodes) \\
+		\textit{use nodes}: & a node for each incidence of a \textit{verb-DO} pair in comments or the source code \\
+		 & \\
+		\textit{pairing edges}: & connecting every verb and DO to the \textit{verb-DO nodes} containing them \\
+		\textit{use edges}: & connecting each \textit{verb-DO node} to every corresponding \textit{use node}.
+	\end{tabular}
+\end{table}
+
+After several steps of improving the query the final query traverses through the \textit{AOIG} and filters every \textit{verb-DO} pair containing words of the query, extracting all methods using the filtered pairs and apply  \textit{Program Dependency Analysis (PDA)} on it to reveal call relations within the extraction.
+
+Finally the \emph{FC} is able to generate the result graph with methods matching the query as nodes and structural relations between the methods computed by the \textit{PDA}. \cite{shepherd2007using} 
+
+
+
 
 \section{Static - Guided}
 \begin{itemize}

@@ -1,0 +1,14 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {chapter}{\numberline {2}Freemind Example}{3}
+\contentsline {chapter}{\numberline {3}Basic Underlying Techniques}{5}
+\contentsline {section}{\numberline {3.1}Formal Concept Analysis (FCA)}{5}
+\contentsline {section}{\numberline {3.2}Latent Semantic Indexing (LSI)}{6}
+\contentsline {section}{\numberline {3.3}Term Frequency - Inverse Document Frequency (tf-idf)}{7}
+\contentsline {section}{\numberline {3.4}Hyper Link Induced Topic Search (HITS)}{8}
+\contentsline {chapter}{\numberline {4}Classification and Methodology}{11}
+\contentsline {chapter}{\numberline {5}Feature Location Techniques}{13}
+\contentsline {section}{\numberline {5.1}Static - Plain}{13}
+\contentsline {section}{\numberline {5.2}Static - Guided}{14}
+\contentsline {section}{\numberline {5.3}Dynamic - Plain}{14}
+\contentsline {section}{\numberline {5.4}Dynamic - Guided}{14}
+\contentsline {chapter}{Literaturverzeichnis}{14}

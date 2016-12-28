@@ -46,7 +46,7 @@ In order to be able to derive such a \emph{concept} the \emph{FCA} creates an in
   \item creating the table with every decapitalize word as a row and every $\sigma$ as a column. The cells $c_ij$ are checked if  $\sigma$ contains the word $w_i$
 \end{enumerate}
 \pagebreak
-\begin{wrapfigure}[19]{l}{0.6\textwidth}
+\begin{wrapfigure}[20]{l}{0.6\textwidth}
     \centering
     \begin{tabular}{| l | c | c | c | c | c | c | c | c |}
       \multicolumn{1}{c}{objects} & \multicolumn{1}{c}{$\sigma_1$} & \multicolumn{1}{c}{$\sigma_2$} & \multicolumn{1}{c}{$\sigma_3$} & \multicolumn{1}{c}{$\sigma_4$} & \multicolumn{1}{c}{$\sigma_5$} & \multicolumn{1}{c}{$\sigma_6$} & \multicolumn{1}{c}{$\sigma_7$} & \multicolumn{1}{c}{$\sigma_8$} \\ 
@@ -69,7 +69,6 @@ In order to be able to derive such a \emph{concept} the \emph{FCA} creates an in
      \caption{The complete incidence table of the Freemind Example}
      \label{FCA_finaltable}
 \end{wrapfigure}
-
 
 Keeping the methods numbers  as we did we get Figure 3.2 as a result. Mathematically it leads us to defining $O$ as a set of objects, $A$ as a set of attributes and $R$ as the set of relations $r = (o,a) \quad o\in O,a\in A$ as derivable of the table. Also we define that \newline
 $\sigma(O) = \{a \in A | (o,a) \in R, \forall o \in O \}$  \quad "all attributes that every $o\in O$ has" \newline
@@ -123,10 +122,10 @@ Like previously mentioned $d_2$ is the most similar to $q$, because of the "poin
 The \emph{term frequency - inverse document frequency} technique is a statistical technique to derive a feature to a given intension. It measures the importance of a term or multiple terms to documents by its frequency of appearing. The terms are terms of the intension of the feature that is wanted to be analyzed. In a simple way it can be described as: "the more frequent a term occurs in the document, the more relevant the document is to the term". \newline
 This is mathematically described as the $document frequency tf=(t,d)$, counting how often the term $t$ is contained in the document $d$.
 In our example the term $t_2 = save$ appears in $d_3$ once and the term $t_1 = automatic$ doesn't appear at all so: $tf(t_2,d_3) = 1$ and $tf(t_1,d_3)=0$. \newline
-Doing that for the terms $t_1 = automatic, t_2 = save$ and $t_3 = file$ and the documents $d_1$ to $d_8$ we get the matrix shown in Fig ~\ref{term-document-matrix}.
+Doing that for the terms $t_1 = automatic, t_2 = save$ and $t_3 = file$ and the documents $d_1$ to $d_8$ we get the matrix shown in Fig.~\ref{term-document-matrix}.
 The main problem of this technique is, that uninformative terms appearing within a document-set, often referred as \emph{corpus} and shortened by $D$, maybe even multiple times can distract from terms, which are mentioned less frequent but are more relevant. To compensate that, the technique relativizes by calculating how many documents contain the term and normalizing it. If it's a commonly used term shared by many documents this term can't be taken as a measurement to differentiate between documents. Or colloquially "the more documents include a term, the less this term discriminates between documents". \newline
 So the so-called \emph{inverse document frequency (idf(t))} is calculated as
-\begin{center}$idf(t) = log((|D|)/|\{ d \in D | t \in d \}|)$  \end{center}
+\begin{center} $idf(t) = log((|D|)/|\{ d \in D | t \in d \}|)$  \end{center}
 with $D$ still being the set of documents. And the final \emph{term frequency - inverse document frequency} is the multiplication of both scores, so:
 \begin{center} \emph{tf-idf}$(t,d) = tf(t,d) * idf(t)$\end{center}
 Regarding our example we can compute the $idf$ of our terms:
@@ -146,7 +145,7 @@ Regarding our example we can compute the $idf$ of our terms:
  \end{tabular}
 \end{table}
 
-Like in the example if the focus isn't on one term but on a set of terms the \emph{tf-idf(t,d)} values to a document $d$ are added up. So finally the matrix can be derived as it is shown in Table~\ref{tfidf_table}.
+Like in the example if the focus isn't on one term but on a set of terms the \emph{tf-idf(t,d)} values to a document $d$ are added up. So finally the matrix can be derived as it is shown in Table \ref{tab:tfidf_table}.
 
 \begin{table}[h]
   \centering
@@ -158,7 +157,7 @@ Like in the example if the focus isn't on one term but on a set of terms the \em
     $t_3 = file $ & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline \hline
     $\sum\nolimits_{i=1}^3$\emph{tf-idf}$(t_i,d_j)$ & 0.727 & 1.454 & 0.1249 & 0 & 0.1249 & 0.1249 & 0.1249 & 0\\ \hline
   \end{tabular}
-  \label{tfidf_table}
+  \label{tab:tfidf_table}
   \caption{Term Frequency - Inverse Document Frequency}
 \end{table}
 

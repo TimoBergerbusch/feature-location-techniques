@@ -1,0 +1,60 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{PBvDL05}
+
+\bibitem[CR00]{chen2000case}
+Kunrong Chen and V{\'a}clav Rajlich.
+\newblock Case study of feature location using dependence graph.
+\newblock In {\em IWPC}, pages 241--247. Citeseer, 2000.
+
+\bibitem[DRGP13]{dit2013feature}
+Bogdan Dit, Meghan Revelle, Malcom Gethers, and Denys Poshyvanyk.
+\newblock Feature location in source code: a taxonomy and survey.
+\newblock {\em Journal of Software: Evolution and Process}, 25(1):53--95, 2013.
+
+\bibitem[KC00]{KR00}
+Václav~Rajlich Kunrong~Chen.
+\newblock {\em {Case Study of Feature Location Using Dependence Graph}}.
+\newblock IWPC, 2000.
+
+\bibitem[PBvDL05]{pohl2005software}
+Klaus Pohl, G{\"u}nter B{\"o}ckle, and Frank~J van Der~Linden.
+\newblock {\em Software product line engineering: foundations, principles and
+  techniques}.
+\newblock Springer Science \& Business Media, 2005.
+
+\bibitem[RC13]{rubin2013survey}
+Julia Rubin and Marsha Chechik.
+\newblock A survey of feature location techniques.
+\newblock In {\em Domain Engineering}, pages 29--58. Springer, 2013.
+
+\bibitem[SFH{\etalchar{+}}07]{shepherd2007using}
+David Shepherd, Zachary~P Fry, Emily Hill, Lori Pollock, and K~Vijay-Shanker.
+\newblock Using natural language program analysis to locate and understand
+  action-oriented concerns.
+\newblock In {\em Proceedings of the 6th international conference on
+  Aspect-oriented software development}, pages 212--224. ACM, 2007.
+
+\bibitem[Wik04a]{wiki:Softwarefeature}
+Wikipedia.
+\newblock Plagiarism --- {W}ikipedia{,} the free encyclopedia, 2004.
+\newblock [Online; accessed 22-July-2004].
+
+\bibitem[Wik04b]{wiki:HITS}
+Wikipedia.
+\newblock Plagiarism --- {W}ikipedia{,} the free encyclopedia, 2004.
+\newblock [Online; accessed 13-December-2016].
+
+\bibitem[www16a]{SPL}
+{ Software Product Lines {\tt http://www.sei.cmu.edu/productlines/}}, november
+  2016.
+
+\bibitem[www16b]{FrM16}
+{Freemind website {\tt http://freemind.sourceforge.net/}}, october 2016.
+
+\bibitem[ZZL{\etalchar{+}}06]{zhao2006sniafl}
+Wei Zhao, Lu~Zhang, Yin Liu, Jiasu Sun, and Fuqing Yang.
+\newblock Sniafl: Towards a static noninteractive approach to feature location.
+\newblock {\em ACM Transactions on Software Engineering and Methodology
+  (TOSEM)}, 15(2):195--226, 2006.
+
+\end{thebibliography}
