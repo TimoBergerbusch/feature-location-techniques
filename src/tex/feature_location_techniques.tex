@@ -4,16 +4,43 @@
 
 % Die Logos sind veraltet und duerfen zurzeit nicht verwendet werden!
 % Auf Seite \pageref{Logo} in Abbildung \ref{Logo} befindet sich das SE Logo.
-In this chapter we want to look at four different feature location techniques in detail. We choose two static and two dynamic techniques with each one technique giving plain and one giving guided output.
+In this chapter we want to look at four different feature location techniques in detail. We choose two static and two dynamic techniques with each one technique giving plain and one giving guided output. The techniques presented in the following can be classified by the characteristics of chapter\ref{ch:Classification and Methodology}:
+
+\begin{table}[h]
+	\hspace{-3em}
+	\begin{tabular}{|l| l l l l l l|}
+		\hline
+		 & technique &  output & underlying & input & result & user \\ 
+		 &  &  &  technology &  &  &  \\\hline
+		 \multirow{5}{1em}{\begin{sideways} static \end{sideways}}
+		 & Find-concept  & plain & PDA, NLP & query & AOIG & ++ 
+		 \\ \\
+		 & SNIAFL & plain & tf-idf, vector & set of query's & BRCG & -/+ \\ 
+		 &        &       & space model, PDA  &             &      &
+		 \\ 
+		 & Dora & guided & PDA, tf-idf & method, depth & call graph & + \\ 
+		 &      &        &             & query         & documents             &  
+		 \\ \\ \hline
+		 \multirow{4}{1em}{\begin{sideways} dynamic \end{sideways}}
+		 & EISENBARTH  & plain & FCA, PDA & scenarios & executable, statement& +++ \\
+		 &   &  &  &  &dependency graph &   \\ 
+		 & POSHYCANYK  & guided & trace analysis & set of& executable, & +++\\
+		 &   &  &  & scenarios, query & documents & +++\\ \hline
+		
+	\end{tabular}
+	\caption{The techniques discussed further on in this paper}
+	\label{tab:techniques overview}
+\end{table}
 
 \section{Static - Plain}
+\label{sec:find-concept}
 As an example of a static technique with plain output the \emph{Find-concept (short FC)} of David Shepherd, Emily Hill, K. Vijay-Shanker and Lori Pollock of the University of Delaware and also Martin P. Robillard of the McGill University in Canada is a reasonable choice
 The technique makes, as previously mentioned in Chapter \ref{ch:Classification and Methodology}, some assumptions to the underlying code. To apply \emph{FC} the code has to be object-oriented, the comments and identifiers, which are objects and methods, have to be named in a way so that the technique can retrieve domain knowledge. Also it makes the premise that verbs correspond to methods and nouns refer to objects. Also FC defines so called \textit{direct objects}, which are objects corresponding to a verb. In our example the verb $save$ corresponds to $MindMapMapModel$, $MindMapNodeModel$ and $MindMapEdgeModel$, which are therefore the direct objects of $save$.\newline
 \emptyLine
 The input to the FC is given by the user as a query of description phrases of the feature of interest and after that decomposed into a set of \textit{verb-DO} pairs. In order to improve the result the technique collects related words,like synonyms or verbs in different time forms, and also regards words, which are often mentioned in the context of words from the query. These collected words then get ranked by their similarity to the query words with for example LSI \ref{ch:lsi}, calculating with a variable weight for the synonyms, and the ten most analogous are presented to the user to augment the query with these terms and program methods already matching to the current query.\newline
 \emptyLine
 The important aspect the user wants to retrieve are the \textit{verb-DO} pairs matching the query. To be able to derive the matching pairs the FC builds an \textit{action-oriented identifier graph model (AOIG)}. The \textit{AOIG} contains four kinds of nodes and 2 types of edges:
-\vspace{3em} %WARNING: smay be shitty
+%\vspace{3em} %WARNING: may be shitty
 
 \begin{table}[th]
 	\begin{tabular}{r l}
@@ -27,26 +54,95 @@ The important aspect the user wants to retrieve are the \textit{verb-DO} pairs m
 	\end{tabular}
 \end{table}
 
-After several steps of improving the query the final query traverses through the \textit{AOIG} and filters every \textit{verb-DO} pair containing words of the query, extracting all methods using the filtered pairs and apply  \textit{Program Dependency Analysis (PDA)} on it to reveal call relations within the extraction.
+After several steps of improving the query the final query traverses through the \textit{AOIG} and filters every \textit{verb-DO} pair containing words of the query, extracting all methods using the filtered pairs and apply \textit{Program Dependency Analysis (PDA)} on it to reveal call relations within the extraction.
 
-Finally the \emph{FC} is able to generate the result graph with methods matching the query as nodes and structural relations between the methods computed by the \textit{PDA}. \cite{shepherd2007using} 
+Finally the \emph{FC} is able to generate the result graph with methods matching the query as nodes and structural relations between the methods computed by the \textit{PDA}. \cite{shepherd2007using} \newline
+Due to the overhead of computing the \textit{verb-DO} pairs out of the query and the step by step improvement of the input the user interaction in Table \ref{tab:techniques overview} is rated with "++".
 
 
 
 
 \section{Static - Guided}
-\begin{itemize}
-\item Suade - Robbilard
-\item Dora - Hill
-\item  CVSSearch - Chen
-\end{itemize}
+The technique presented by \emph{Emily Hill, Lori Pollock} and \emph{K. Vijay-Shanker}, professors of the \textit{University of Delaware} in  \textit{Computer and Information Science}, is named \emph{Dora the Program Explorer} (short: \emph{Dora}})\footnote{Dora comes from exploradora, the Spanish word for a female explorer\cite{hill2007exploring}. Also the name chosen in account of the children's series "\textit{Dora the Explorer}" }.
+Dora also uses a call graph $G=(V,E)$ to derive dependency, like the \emph{Find-concept} in section~\ref{sec:find-concept}, but combines it with the \emph{tf-idf} ranking method explained in section \ref{ch:tf-idf} with the methods as nodes $n \in V$, it's body as the documents $d(n)$ and edges $e=(n,m) \in E$ if $n$ calls $m$. \newline
+As an input the user has to yield an initial query, a so called \textit{seed method}$ n_0 \in V$ the examination should start from, and a depth defining a graph-neighbourhood, which should be included in the search(i.e. a maximal distance). \newline
+Given the input Dora proceeds by traversing through the call graph $G$ calculating how suitable the document $d(n)$ of the current node $n$ is by combining the succeeding three values:
+\begin{enumerate}
+	\item the \emph{tf-idf} score of the identifiers within the method name ($n$)
+	\item the \emph{tf-idf} score of the identifiers within the method body ($d(n)$)
+	\item a binary value to indicate if the method belongs to a library or is part of the user-made code
+\end{enumerate}
+Dora can be parametrized by the weight of these three components, for example the method name(1) should be more important than the method body(2) and if the method is out of a library it shouldn't be considered, which leads to the following formulae:
+\begin{center}
+	$\quad s(n)= (1-b) * [ \frac{2}{3} $\emph{tf-idf}$(n) + \frac{1}{3}$\emph{tf-idf}$(d(n)) ]$
+\end{center} 
+where $b$ defines if $n$ belongs to a library($b=1$) or $n$ is user-made($b=0$).
+There are two more adjustable values: the relevance threshold($rt$) and exploration threshold($et$). The relevance threshold determine whether a node is relevant or not can be parametrized by giving a value $rt,et \in [0,1] $ and typically $et < rt$, that given a node $n$:
+\vspace{2em} %WARNING: might be shitty
+\begin{table}[h]
+	\centering
+	\begin{tabular}{r c l}
+		$rt <= s(n)$ & $\rightarrow$ & the node is relevant\\
+		$et <= s(n) < rt$ & $\rightarrow$ & the node isn't relevant, but maybe it's neighbours \\
+		$s(n) < et$ & $\rightarrow$ the node can be neglected
+	\end{tabular}
+\end{table}
+
+In the case of 1 and 2 Dora traverses to the neighbourhood of the node, if it doesn't harm the the initial depth, and otherwise discards the node. So in finite steps of traversing through the call graph Dora has reached a point, where no additional elements need to be explored.\newline
+The result Dora computes is a subgraph $G'=(V',E')$ of the call graph, where $V' = \{ n \in V | et <= s(n) \}$, $E' = \{ (n,m) \in E | n,m \in V' \}$ and a function \newline
+\[
+	f: n\in V' \rightarrow \{0,1\},n \rightarrow 
+		\left\{
+			\begin{array}{ll} 
+				1, & s(n) >= rt \\
+				0, & else 
+			\end{array}\right. .
+\]
+This function can be described as a colouring of every \textit{relevant} node. The final output is the coloured sub-call-graph $G'$. \newline
+\emptyLine
+In the \textit{Freemind Example} of chapter \ref{ch:Freemind Example} the result can look different, by changing the parameters like the \textit{seed method}, the \textit{depth} or the \textit{threshold values}.
+Simplifying the method in the fact of disregarding the method body's and by knowing that every method called in the diagram \ref{dia:freemind callgraph} is user made, the scores are equal to their score in chapter \ref{tab:tfidf_table}. \newline
+The threshold are choosen like the following:
+\begin{table}[h]
+	\centering
+	\begin{tabular}{r l}
+		$rt = 0.5$ & methods with a score of 0.5 or higher are considered relevant \\
+		$et = 0.1$ & methods with a score of 0.3 or higher should be explored further
+	\end{tabular}
+\end{table}
+So the final graph Dora computes looks like the graphfigure \ref{dia:dora result}. The green nodes are relevant to the feature, the grey nodes are explored but not relevant. The red node(\#2) is highly relevant to the feature with a \emph{tf-idf score} of 1.454, but isn't explored due to the \textit{depth} of 3.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\tikzset{vertex/.style = {shape=ellipse,draw,minimum size=1.5em}}
+		\tikzset{edge/.style = {->,> = latex'}}
+		% vertices
+		\node[vertex, fill=black!30!green] (p1) at  (0,2) {\#1};
+		\node[vertex, fill=black!30!red] (p2) at  (3,2) {\#2};
+		\node[vertex, fill=gray] (p3) at  (0,0) {\#3};
+		\node[vertex, fill=gray] (p4) at  (3,0) {\#4};
+		\node[vertex, fill=gray] (p5) at (-1,-1)  {\#5};
+		\node[vertex, fill=gray] (p6) at (-1,-2.5) {\#6};
+		\node[vertex, fill=gray] (p7) at (1,-1)  {\#7};
+		\node[vertex, fill=gray] (p8) at (1,-2.5) {\#8};
+		%edges
+		\draw[edge] (p1)  to (p3);
+		\draw[edge] (p4)  to (p2);
+		\draw[edge] (p7)  to (p3);
+		\draw[edge] (p3)  to (p5);
+		\draw[edge] (p5)  to (p6);
+		\draw[edge] (p7)  to (p4);
+		\draw[edge] (p8)  to (p4);
+		\draw[edge] (p8)  to (p7);
+	\end{tikzpicture}
+	\caption{The result graph of \textit{Dora}, with \#1 as \textit{seed method}, \textit{depth}=3, rt=0.5 and et=0.1}
+	\label{dia:dora result}
+\end{figure}
+ In modern cases of application the \textit{threshold}-values are chosen by a heuristic of other cases and general knowledge of the underlying program. Including the \textit{methods body} (2) and the binary value of the formulae the result can be refined by slightly changing the query or the \textit{threshold's}. \newline
+\emph{Dora} only needs a query and a \textit{depth} to compute a result, which takes to further interaction, which is marked within the Table \ref{tab:techniques overview} with only one "+".
 
 \section{Dynamic - Plain}
-\begin{itemize}
-\item Sw. Reconnaissance - Wilde
-\item Koschke
-\item Asadi
-\end{itemize}
+
 
 \section{Dynamic - Guided}
 \begin{itemize}

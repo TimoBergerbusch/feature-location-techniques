@@ -11,6 +11,13 @@ Bogdan Dit, Meghan Revelle, Malcom Gethers, and Denys Poshyvanyk.
 \newblock Feature location in source code: a taxonomy and survey.
 \newblock {\em Journal of Software: Evolution and Process}, 25(1):53--95, 2013.
 
+\bibitem[HPVS07]{hill2007exploring}
+Emily Hill, Lori Pollock, and K~Vijay-Shanker.
+\newblock Exploring the neighborhood with dora to expedite software
+  maintenance.
+\newblock In {\em Proceedings of the twenty-second IEEE/ACM international
+  conference on Automated software engineering}, pages 14--23. ACM, 2007.
+
 \bibitem[KC00]{KR00}
 Václav~Rajlich Kunrong~Chen.
 \newblock {\em {Case Study of Feature Location Using Dependence Graph}}.

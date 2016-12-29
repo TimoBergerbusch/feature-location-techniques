@@ -93,10 +93,10 @@ Which leads to the definition that $C, \le$ form a concept lattice and in our ex
 \begin{wrapfigure}[17]{l}{0.5\textwidth}
   \centering
     \includegraphics[width=\linewidth]{src/pic/term_document_matrix}
-    \label{term-document-matrix}
+    \label{pic:term-document-matrix}
   \caption{The term-document matrix}
 \end{wrapfigure}
-The \emph{Latent Semantic Indexing}(short: \emph{LSI}) is an automatic statistical technique. It derives to a given document a vector representation of the query and the corpus by creating a term-document matrix of co-occurring terms. A term $t_i$ is a word, as a tokenized and decapitalized word of the methods ordered alphabetically and is represented in a row of the matrix. A document $d_j$, which are in our example the different method- and class names, are represented as the columns of the matrix. So the matrix, shown in Fig.~\ref{term-document-matrix}, looks very similar to the table of FCA (Fig.~\ref{FCA_finaltable}) with the difference of an unsigned integer value $v_ij$, representing how often a document $d_j=MindMapMapModel.doAutomaticSave.run()$ contains token $t_i$, i.e. $d_1$ contains the token $t_7=map$ twice, but the token $t_2=automatic$ only once and doesn't contain $t_1=action$ at all. Also a query \emph{q} is given, which has a \emph{1} at the terms \emph{automatic}, \emph{save} and \emph{file} representing the feature that should be analyzed. 
+The \emph{Latent Semantic Indexing}(short: \emph{LSI}) is an automatic statistical technique. It derives to a given document a vector representation of the query and the corpus by creating a term-document matrix of co-occurring terms. A term $t_i$ is a word, as a tokenized and decapitalized word of the methods ordered alphabetically and is represented in a row of the matrix. A document $d_j$, which are in our example the different method- and class names, are represented as the columns of the matrix. So the matrix, shown in \autoref{pic:term-document-matrix}, looks very similar to the table of FCA (Fig.~\ref{FCA_finaltable}) with the difference of an unsigned integer value $v_ij$, representing how often a document $d_j=MindMapMapModel.doAutomaticSave.run()$ contains token $t_i$, i.e. $d_1$ contains the token $t_7=map$ twice, but the token $t_2=automatic$ only once and doesn't contain $t_1=action$ at all. Also a query \emph{q} is given, which has a \emph{1} at the terms \emph{automatic}, \emph{save} and \emph{file} representing the feature that should be analyzed. 
 
 
 \begin{wrapfigure}[15]{l}{0.5\textwidth}
@@ -118,6 +118,7 @@ Like previously mentioned $d_2$ is the most similar to $q$, because of the "poin
 
 %END LATENT SEMANTIC
 \section{Term Frequency - Inverse Document Frequency (tf-idf)}
+\label{ch:tf-idf}
 %BEGINN TERM FREQUENCY
 The \emph{term frequency - inverse document frequency} technique is a statistical technique to derive a feature to a given intension. It measures the importance of a term or multiple terms to documents by its frequency of appearing. The terms are terms of the intension of the feature that is wanted to be analyzed. In a simple way it can be described as: "the more frequent a term occurs in the document, the more relevant the document is to the term". \newline
 This is mathematically described as the $document frequency tf=(t,d)$, counting how often the term $t$ is contained in the document $d$.
@@ -130,18 +131,12 @@ with $D$ still being the set of documents. And the final \emph{term frequency - 
 \begin{center} \emph{tf-idf}$(t,d) = tf(t,d) * idf(t)$\end{center}
 Regarding our example we can compute the $idf$ of our terms:
 
-%\begin{itemize}
-%  \item $t_1 = automatic : idf(t_1) = log(8/2)$ 
-%  \item $t_2 = save : idf(t_2)=log(8/6)$
-%  \item $t_3 = file : idf(t_3)=0$ 
-%\end{itemize}
-
 \begin{table}[h]
   \centering
   \begin{tabular}{l}
-    $t_1 = automatic : idf(t_1) = log(8/2)$  \\
-    $t_2 = save : idf(t_2)=log(8/6)$ \\
-    $t_3 = file : idf(t_3)=0$ 
+    $t_1 = log(automatic / idf(t_1)) = log(8/2)$  \\
+    $t_2 = log(save / idf(t_2))=log(8/6)$ \\
+    $t_3 = idf(t_3)=0$ 
  \end{tabular}
 \end{table}
 
