@@ -11,21 +11,20 @@ In this chapter we want to look at four different feature location techniques in
 	\begin{tabular}{|l| l l l l l l|}
 		\hline
 		 & technique &  output & underlying & input & result & user \\ 
-		 &  &  &  technology &  &  &  \\\hline
+		 &  &  &  technology &  &  &  \\ \hline
 		 \multirow{5}{1em}{\begin{sideways} static \end{sideways}}
-		 & Find-concept  & plain & PDA, NLP & query & AOIG & ++ 
-		 \\ \\
-		 & SNIAFL & plain & tf-idf, vector & set of query's & BRCG & -/+ \\ 
-		 &        &       & space model, PDA  &             &      &
+		 & Find-concept  & plain & PDA, NLP & query & AOIG & ++  \\
+		 &      &        &             & query         & documents  &   \\
+		 & SNIAFL & plain & tf-idf, LSI, & set of query's & BRCG & -/+ \\ 
+		 &        &       & PDA  &             &      &
 		 \\ 
 		 & Dora & guided & PDA, tf-idf & method, depth & call graph & + \\ 
-		 &      &        &             & query         & documents             &  
-		 \\ \\ \hline
+		 &      &        &             & query         & documents  &   \\ \hline
 		 \multirow{4}{1em}{\begin{sideways} dynamic \end{sideways}}
-		 & EISENBARTH  & plain & FCA, PDA & scenarios & executable, statement& +++ \\
-		 &   &  &  &  &dependency graph &   \\ 
-		 & POSHYCANYK  & guided & trace analysis & set of& executable, & +++\\
-		 &   &  &  & scenarios, query & documents & +++\\ \hline
+		 & Software Reconnaissance  & plain & FCA, PDA & set of & executable & +++ \\ 
+		 &   &  &  & scenarios, query & & \\
+		 & Revelle  & guided & trace analysis & scenario and & executable, & +\\
+		 &   &  & LSI, HITS & query & documents & \\ \hline
 		
 	\end{tabular}
 	\caption{The techniques discussed further on in this paper}
@@ -58,9 +57,6 @@ After several steps of improving the query the final query traverses through the
 
 Finally the \emph{FC} is able to generate the result graph with methods matching the query as nodes and structural relations between the methods computed by the \textit{PDA}. \cite{shepherd2007using} \newline
 Due to the overhead of computing the \textit{verb-DO} pairs out of the query and the step by step improvement of the input the user interaction in Table \ref{tab:techniques overview} is rated with "++".
-
-
-
 
 \section{Static - Guided}
 The technique presented by \emph{Emily Hill, Lori Pollock} and \emph{K. Vijay-Shanker}, professors of the \textit{University of Delaware} in  \textit{Computer and Information Science}, is named \emph{Dora the Program Explorer} (short: \emph{Dora}})\footnote{Dora comes from exploradora, the Spanish word for a female explorer\cite{hill2007exploring}. Also the name chosen in account of the children's series "\textit{Dora the Explorer}" }.
@@ -142,13 +138,59 @@ So the final graph Dora computes looks like the graphfigure \ref{dia:dora result
 \emph{Dora} only needs a query and a \textit{depth} to compute a result, which takes to further interaction, which is marked within the Table \ref{tab:techniques overview} with only one "+".
 
 \section{Dynamic - Plain}
+One of the most important dynamic plain approaches is the very first one of Norman Wilde and Michael Scully known under the term \emph{Software Reconnaissance}. \textit{Software Reconnaissance} tries to define a feature $f$ by getting two sets of scenarios $S_f$ and $\overline{S_f}$ as an input and distinguishing between scenarios that invoke the feature of interest $S$ and scenarios that don't $\overline{S_f}$. \newline
+Regarding the execution traces \textit{Software Reconnaissance} categorizes methods/lines of code $M$\footnote{the degree of fineness is chosen by the user} into three groups:
+\begin{table}[h]
+	\begin{tabular}{l}
+		1. potentially involved  \\
+ 		\qquad $I_1 = \{ m \in M | \exists s \in S_f$ s.t. $s$ executes $m \}$ \\
+ 		\qquad get executed by \underline{at least one} scenario of $S_f$\\
+		2. indispensably involved  \\
+		\qquad $I_2 = \{ m \in M | \forall s \in S_f : s$ executes $m \}$ \\
+		\qquad get executed by \underline{every} scenario of $S_f$\\
+		3. uniquely involved  \\
+		\qquad $I_3 = \{ m \in M | m \in I_1$ and $\forall s\in \overline{S_f} : s$ does \underline{not} execute $m \}$ \\
+		\qquad executed by at least one scenario of $S_f$ and by no scenario of any other feature\\
+		4. common components  \\
+		\qquad $C = \{ m \in M | \forall s \in S_f \cup \overline{S_f}:s$ executes $m \}$ \\
+		\qquad used by every scenario (for example a \textit{main}-method)
+	\end{tabular}
+\end{table}
+The result are the first 3 lists for every feature $f$ that is set in the query and once the list of all \textit{common} components. Different versions of this technique state, that $I_2 \cap C = \emptyset$.\cite{wilde1995software} \newline
+\emptyLine
+In our example regarding the two features of $f_1 = automaticSaveFile$ and $f_2 = manualSaveFile$ the execution traces are quite similar owed to the fact, that the \textit{automaticSaveFile}-feature is just a not user triggered \textit{internalSave}. Keeping in mind the callgraph(\autoref{dia:freemind callgraph}) methods \#3, \#5 and \#6 will be considered as \textit{common} components. Method \#1 will be considered \textit{uniquely involved} to the feature $f_1$. \newline
+\emptyLine
+This technique already requires voluminous overhead, because of the two sets of scenarios $S_f$ and $\overline{S_f}$ for every feature.
 
 
 \section{Dynamic - Guided}
+The dynamic guided technique by Meghan Revelle, Bogdan Dit and Denys Poshyvanyk, which are professors at the College of William and Mary in Virginia, is based on a chain of other techniques here and further named as the main author:
+\begin{center}
+	$Revelle \rightarrow Liu \rightarrow Poshyvanyk \rightarrow Marcus$
+\end{center}
+\label{ref:marcus}
+The very base technique by Marcus is to take given an input query and convert it into a document in vector space using the in \autoref{ch:lsi} mentioned \textit{LSI}. The technique then separates different software elements, for example methods, and creates separate documents using the identifiers and also converting them into vector space. The identifiers are often separated using typical code style, like the connecting of two words using "\underline{ }" or changing from lower to upper case letters. In order to filter the result the search space in partitioned by refining the documents similarity values, so that in step $i+1$ are only the documents of step $i$, which are higher than a given threshold. After that the user decides which documents are relevant to the feature. Once the user decides that no further document is relevant to the feature the the algorithm terminates. \cite{marcus2004semantic} \newline
+%In addition to \textit{Marcus} \textit{Poshyvanyk} uses FCA \autoref{sec:FCA} to rank the documents after they are ranked on the similarity to the input query. \textit{Poshyvanyk} takes the first $n$ documents and ranks the \emph{uniquely} appearing terms in the documents based on the similarity the term and the corpus-document in a way, that terms, which are similar to terms in the $n$ documents but not in the rest, are ranked higher. On the other hand terms, which are similar to documents not being in the top $n$ documents, are penalized because might have identifiers for not relevant things with relevant names and therefore would distort the result. After ranking the unique terms \textit{Poshyvanyk} selects the top $k$ terms as \textit{attributes} out of the top $n$ documents, which are the \textit{objects}, and apply FCA \autoref{sec:FCA}. So the user gets not only the space vectors of the similarity of the documents, but also gets a visualization of the terms used within. \newline
+\textit{Poshyvanyk} uses a combination of \textit{Marcus} \textit{LSI} method and \textit{execution-trace analysis} \footnote{further information on that topic within the \textit{IEEE}-paper \cite{antoniol2006feature}}. To analyse a program is has to be given as an input in an executable form, to determine if which methods are called on a scenario, and a set of documents, which can be defines out of a query with \textit{Marcus}. Also the technique needs two sets of scenarios: one that invoke the feature of interest and one that doesn't. First the technique ranks the documents like within \textit{Marcus}. After that the scenario sets are executed and execution profiles are derived. By that the methods can be ranked by the appearance within the traces of the scenarios that execute the feature versus the appearance within the other scenarios. The final result of a method is a weighted sum of the \textit{LSI}-rank and the \textit{trace}-rank. So the final output is the again a ranked list of methods. \cite{poshyvanyk2007feature} \newline
+The technique \textit{Liu} is quite similar to \textit{Poshyvanyk}, with the difference, that instead of using two sets of scenarios \textit{Liu} only works with a single scenario executing the feature of interest. This reduces the overhead of input and also accelerates the process, accepting the fact that the result may not be as accurate as it would be with \textit{Poshyvanyk}. \cite{liu2007feature} \newline
+The technique \textit{Revelle} combines \textit{Information Retrieval}, \textit{dynamic} and \textit{web-mining} analysis in order to improve the results of the previous methods. Like \textit{Riu} \textit{Revelle} gets a single scenario that exercises the feature of interest and a query as input. While running the scenario the call graph from the execution trace is constructed, which nodes are methods that are actually executed. Every node gets a score using a web-mining algorithm like the HITS-algorithm mentioned in \autoref{sec:HITS}. After assigning the values \textit{Revelle} filters one of the following two out:
 \begin{itemize}
-\item SITIR - Liu
-\item Cerberus - Eaddy
-\end{itemize}
+	\item low-ranked methods 
+	\begin{itemize}
+		\item typically used on \textit{HITS authority score}
+		\item methods that aren't called often aren't extremely important
+	\end{itemize}
+	\item high-ranked methods 
+	\begin{itemize}
+		\item typically used on \textit{HITS hub score}
+		\item  methods that call very many other methods aren't meaningful
+	\end{itemize}
+\end{itemize} 
+The remaining set of methods get ranked by using \textit{Liu} and the final ranked list is returned to the user.
+The overall user interaction is quite sparely, because of one scenario and a query about the feature of interest and therefore rated with "+" in \autoref{tab:techniques overview}. \cite{revelle2010using}
+
+\section{Future Technique Approaches}
+
 
 
 %\clearpage

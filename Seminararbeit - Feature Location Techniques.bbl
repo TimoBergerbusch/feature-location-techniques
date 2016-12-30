@@ -1,6 +1,12 @@
 \newcommand{\etalchar}[1]{$^{#1}$}
 \begin{thebibliography}{PBvDL05}
 
+\bibitem[AG06]{antoniol2006feature}
+Giuliano Antoniol and Y-G Gu{\'e}h{\'e}neuc.
+\newblock Feature identification: An epidemiological metaphor.
+\newblock {\em IEEE Transactions on Software Engineering}, 32(9):627--641,
+  2006.
+
 \bibitem[CR00]{chen2000case}
 Kunrong Chen and V{\'a}clav Rajlich.
 \newblock Case study of feature location using dependence graph.
@@ -23,16 +29,44 @@ Václav~Rajlich Kunrong~Chen.
 \newblock {\em {Case Study of Feature Location Using Dependence Graph}}.
 \newblock IWPC, 2000.
 
+\bibitem[LMPR07]{liu2007feature}
+Dapeng Liu, Andrian Marcus, Denys Poshyvanyk, and Vaclav Rajlich.
+\newblock Feature location via information retrieval based filtering of a
+  single scenario execution trace.
+\newblock In {\em Proceedings of the twenty-second IEEE/ACM international
+  conference on Automated software engineering}, pages 234--243. ACM, 2007.
+
+\bibitem[Mar04]{marcus2004semantic}
+Andrian Marcus.
+\newblock Semantic driven program analysis.
+\newblock In {\em Software Maintenance, 2004. Proceedings. 20th IEEE
+  International Conference on}, pages 469--473. IEEE, 2004.
+
 \bibitem[PBvDL05]{pohl2005software}
 Klaus Pohl, G{\"u}nter B{\"o}ckle, and Frank~J van Der~Linden.
 \newblock {\em Software product line engineering: foundations, principles and
   techniques}.
 \newblock Springer Science \& Business Media, 2005.
 
+\bibitem[PGM{\etalchar{+}}07]{poshyvanyk2007feature}
+Denys Poshyvanyk, Yann-Gael Gueheneuc, Andrian Marcus, Giuliano Antoniol, and
+  Vaclav Rajlich.
+\newblock Feature location using probabilistic ranking of methods based on
+  execution scenarios and information retrieval.
+\newblock {\em IEEE Transactions on Software Engineering}, 33(6):420--432,
+  2007.
+
 \bibitem[RC13]{rubin2013survey}
 Julia Rubin and Marsha Chechik.
 \newblock A survey of feature location techniques.
 \newblock In {\em Domain Engineering}, pages 29--58. Springer, 2013.
+
+\bibitem[RDP10]{revelle2010using}
+Meghan Revelle, Bogdan Dit, and Denys Poshyvanyk.
+\newblock Using data fusion and web mining to support feature location in
+  software.
+\newblock In {\em Program Comprehension (ICPC), 2010 IEEE 18th International
+  Conference on}, pages 14--23. IEEE, 2010.
 
 \bibitem[SFH{\etalchar{+}}07]{shepherd2007using}
 David Shepherd, Zachary~P Fry, Emily Hill, Lori Pollock, and K~Vijay-Shanker.
@@ -50,6 +84,12 @@ Wikipedia.
 Wikipedia.
 \newblock Plagiarism --- {W}ikipedia{,} the free encyclopedia, 2004.
 \newblock [Online; accessed 13-December-2016].
+
+\bibitem[WS95]{wilde1995software}
+Norman Wilde and Michael~C Scully.
+\newblock Software reconnaissance: mapping program features to code.
+\newblock {\em Journal of Software Maintenance: Research and Practice},
+  7(1):49--62, 1995.
 
 \bibitem[www16a]{SPL}
 { Software Product Lines {\tt http://www.sei.cmu.edu/productlines/}}, november
