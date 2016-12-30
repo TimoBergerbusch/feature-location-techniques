@@ -80,7 +80,7 @@ There are two more adjustable values: the relevance threshold($rt$) and explorat
 	\begin{tabular}{r c l}
 		$rt <= s(n)$ & $\rightarrow$ & the node is relevant\\
 		$et <= s(n) < rt$ & $\rightarrow$ & the node isn't relevant, but maybe it's neighbours \\
-		$s(n) < et$ & $\rightarrow$ the node can be neglected
+		$s(n) < et$ & $\rightarrow$ & the node can be neglected
 	\end{tabular}
 \end{table}
 
@@ -190,7 +190,76 @@ The remaining set of methods get ranked by using \textit{Liu} and the final rank
 The overall user interaction is quite sparely, because of one scenario and a query about the feature of interest and therefore rated with "+" in \autoref{tab:techniques overview}. \cite{revelle2010using}
 
 \section{Future Technique Approaches}
+All of the presented techniques are still under research to improve the results accuracy, the runtime and the amount of user interaction. Even if the last point isn't that important in the beginning is can be the most essential due to the possibility of high serialisation. Also the generally preferred technique group is the static one, because of the high amount of pre-computing used to derive scenarios and checking if they invoke the feature and the execution time used to run these.\newline
+\textit{W. Zhao, L. Zhang, J. Sun and F. Yang} from the University of Peking in cooperation with \textit{L. Yin} of the Rensselaer Polytechnic Institute are working on an approach of a \textit{static non-interactive} technique by using \textit{Program Dependency Analysis} and \textit{Information Retrieval} technologies.\newline
+They define two types of functions of a feature:
+\begin{enumerate}
+	\item \textit{specific functions}:
+	functions only used to implement the feature and not used by any other feature.
+	\item \textit{relevant functions}:
+	functions involved in the implementation of the feature
+\end{enumerate}
+The set of \textit{specific features} is indisputable a subset of the set of \textit{ relevant features}.
+The presentation of the program within the technique is realized with a so called \textit{Branch-Reserving Call Graph (BRCG)}, which is a a normal call graph expanded with branching and sequential information. These informations can be used to construct pseudo execution traces for a feature. The \textit{BRCG} can be written as $G=(V,E)$ with the nodes $V$ as a function, a branch or a return statement. Loops are defined as two branch statements: one going through the loopbody and one exiting immediately. 
 
+%\begin{figure}[hbt]{0.5*\textwidth}
+%	\lstset{language=Java}
+%	\lstinputlisting[
+%	label=lst:system,
+%	caption=An example code for BRCG] {src/listings/BRCG-examplecode.java}
+%\end{figure}
+
+\noindent\begin{minipage}{.35\textwidth}
+	\lstset{language=Java}
+	\lstinputlisting[
+		label=lst:code,
+		caption=An example code for BRCG] {src/listings/BRCG-examplecode.java}
+\end{minipage}\hfill
+\begin{minipage}{.55\textwidth}
+%	\begin{tikzpicture}
+%		\tikzset{method/.style = {shape=circle,draw,minimum size=3em}}
+%		\tikzset{decision/.style = {shape=diamond,draw,minimum size=1em, node distance=3em}}
+%		\tikzset{sequential/.style = {shape=rectangle,draw,minimum width=4em,,node distance=2.25em}}
+%		\tikzset{branch/.style = {shape=ellipse,draw,minimum width=3em,node distance=3em}}
+%		\tikzset{edge/.style = {->,> = latex'}}
+%		
+%		\node[method] (method) at  (5,1) {func};
+%		\node[sequential, below of=method](method_sequential) {sequential};
+%		
+%		\node[method, below left = of method_sequential] (f1) {f1};
+%		\node[decision, below = of method_sequential](BS1){BS1};
+%		\node[branch, below of=BS1](BS1_branching) {branching};
+%		\node[method, below right = of method_sequential] (f6){f6};
+%		
+%		\node[method, below left = of BS1_branching] (B1) {B1};
+%		\node[sequential, below of=B1](B1_sequential) {sequential};
+%		\node[method, below right = of BS1_branching] (B2) {B2};
+%		\node[sequential, below of=B2](B2_sequential) {sequential};
+%		
+%		\node[method, below left = of B1_sequential] (f2) {f2};
+%		\node[method, below right = of B1_sequential] (exit) {exit};
+%		
+%		\node[decision, below left = of B2_sequential] (BS2) {BS2};
+%		\node[branch, below of=BS2,node distance=3em](BS2_branching) {branching};
+%		\node[method, below right = of B2_sequential] (f5) {f5};
+%	\end{tikzpicture}
+
+%	\begin{forest}
+%		method/.style = {shape=circle,draw,minimum size=3em},
+%		decision/.style = {shape=diamond,draw,minimum size=1em},
+%		sequential/.style = {shape=rectangle,draw,minimum width=4em,,node distance=2.25em},
+%		branch/.style = {shape=ellipse,draw,minimum width=3em,node distance=3em},
+%		edge/.style = {->,> = latex'}
+%		[{func},method
+%			[{f1}, method],
+%			[{BS1}, method],
+%			[{f6}, method]
+%		]
+%	\end{forest}
+	\vspace{-5em}
+	\includegraphics[width=.75\textwidth]{src/pic/BRCG-example.png}
+	\captionof{figure}{The BRCG of the example code in \autoref{lst:code} \cite{zhao2006sniafl}}
+\end{minipage}
 
 
 %\clearpage
