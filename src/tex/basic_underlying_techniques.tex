@@ -1,4 +1,5 @@
 \chapter{Basic Underlying Techniques}
+\label{ch:basic underlying techniques}
 
 To understand how feature location techniques work it is important to understand a few basic techniques that are commonly used to create or improve feature location. All the basic techniques  will be exemplary executed on the previously introduced Freemind-example in chapter~\ref{ch:Freemind Example}.
 
@@ -35,12 +36,12 @@ To understand how feature location techniques work it is important to understand
    \draw[->] (c) -- node[right] {3. create table} (d);
   \end{tikzpicture}}
   \caption{\#1 of the Freemind Example as example}
-  \label{flowchart}
+  \label{graph:FCA-flowchart}
 \end{wrapfigure}
 
 
 The \emph{FCA}'s goal is to define so called \emph{concepts}. A \emph{concept} is a tuple of extension, the objects that belong to a concept, and intension, all the attributes that \underline{every} object of the extension has.
-In order to be able to derive such a \emph{concept} the \emph{FCA} creates an incidence table. The table can be derived in 3 steps as seen in Fig. ~\ref{flowchart}:
+In order to be able to derive such a \emph{concept} the \emph{FCA} creates an incidence table. The table can be derived in 3 steps as seen in \autoref{graph:FCA-flowchart}:
 \begin{enumerate}
   \item declaring every word in the objects and methods as $w_i$ to a new $i$ if the word isn't already defined
   \item decapitalizing every $w_i$
@@ -68,7 +69,7 @@ In order to be able to derive such a \emph{concept} the \emph{FCA} creates an in
       save 		& \checkmark	& \checkmark & \checkmark  &			     & \checkmark & \checkmark  & \checkmark &				 \\ \hline
     \end{tabular}
      \caption{The complete incidence table of the Freemind Example}
-     \label{FCA_finaltable}
+     \label{table:FCA-finaltable}
 \end{wrapfigure}
 
 Keeping the methods numbers  as we did we get Figure 3.2 as a result. Mathematically it leads us to defining $O$ as a set of objects, $A$ as a set of attributes and $R$ as the set of relations $r = (o,a) \quad o\in O,a\in A$ as derivable of the table. Also we define that \newline
@@ -86,24 +87,21 @@ From there it is very easy to see, that the set of all concepts $C$ is a partial
 \vspace{-1em}
 Which leads to the definition that $C, \le$ form a concept lattice and in our example it's a taxonomy of name tokens.
 
-%END FCA%
-
-%BEGINN LATENT SEMANTIC%
 \section{Latent Semantic Indexing (LSI)}
-\label{ch:lsi}
+\label{sec:LSI}
 \begin{wrapfigure}[17]{l}{0.5\textwidth}
   \centering
-    \includegraphics[width=\linewidth]{src/pic/term_document_matrix}
-    \label{pic:term-document-matrix}
+  \includegraphics[width=\linewidth]{src/pic/term_document_matrix}
   \caption{The term-document matrix}
+  \label{pic:term-document-matrix}
 \end{wrapfigure}
-The \emph{Latent Semantic Indexing}(short: \emph{LSI}) is an automatic statistical technique. It derives to a given document a vector representation of the query and the corpus by creating a term-document matrix of co-occurring terms. A term $t_i$ is a word, as a tokenized and decapitalized word of the methods ordered alphabetically and is represented in a row of the matrix. A document $d_j$, which are in our example the different method- and class names, are represented as the columns of the matrix. So the matrix, shown in \autoref{pic:term-document-matrix}, looks very similar to the table of FCA (Fig.~\ref{FCA_finaltable}) with the difference of an unsigned integer value $v_ij$, representing how often a document $d_j=MindMapMapModel.doAutomaticSave.run()$ contains token $t_i$, i.e. $d_1$ contains the token $t_7=map$ twice, but the token $t_2=automatic$ only once and doesn't contain $t_1=action$ at all. Also a query \emph{q} is given, which has a \emph{1} at the terms \emph{automatic}, \emph{save} and \emph{file} representing the feature that should be analyzed. 
+The \emph{Latent Semantic Indexing}(short: \emph{LSI}) is an automatic statistical technique. It derives to a given document a vector representation of the query and the corpus by creating a term-document matrix of co-occurring terms. A term $t_i$ is a word, as a tokenized and de-capitalized word of the methods ordered alphabetically and is represented in a row of the matrix. A document $d_j$, which are in our example the different method- and class names, are represented as the columns of the matrix. So the matrix, shown in \autoref{pic:term-document-matrix}, looks very similar to the table of FCA (\autoref{table:FCA-finaltable}) with the difference of an unsigned integer value $v_ij$, representing how often a document $d_j=MindMapMapModel.doAutomaticSave.run()$ contains token $t_i$, i.e. $d_1$ contains the token $t_7=map$ twice, but the token $t_2=automatic$ only once and doesn't contain $t_1=action$ at all. Also a query \emph{q} is given, which has a \emph{1} at the terms \emph{automatic}, \emph{save} and \emph{file} representing the feature that should be analysed. 
 
 
 \begin{wrapfigure}[15]{l}{0.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{src/pic/lsf-vectors}
-  \label{lsf_vectors}
+  \label{pic:lsi_vectors}
   \caption{The vector representation of the documents $d_j$ and the query $q$ from the Freemind Example~\ref{ch:Freemind Example}}
 \end{wrapfigure}
 By normalizing and decomposing using a singular value decomposition the documents can be put into vector representation so that every document has a vector representing their equality to the query $q$. Taking the $cosine()$ of the query $q$ and a document $d_j$ it is possible to measure the similarity. If a document and a query are equal the spreading angle would be $0$ and therefor the best possible similarity is given by $cosine(0)=1$. Also the worst possible angle is $180$, which is equal to document "pointing in the opposite direction", and therefor the worst similarity is given by $cosine(180)=-1$. The common interpretation of the values, regarding that $D$ is the set of all documents, is, that the set $\{d_i \in D| cosine(d_i,q) \ge 0 \} \subseteq D$ are considered to be a related to the query of interest, hence every other document is not. It's simple to see that a document is more similar if it points in the same general direction as the query, because of the shared terms. In the Freemind Example the document $d_2=\color{red}MindMapMapModel\color{black}.\color{red}do\color{green}AutomaticSave\color{black}.\color{red}do\color{green}AutomaticSave\color{black}$ is the most similar to the query $q=\color{green}automaticSaveFile\color{black}$, while $d_8=\color{red}MindMapController\color{black}.\color{red}actionPerformed\color{black}$ is the least similar.
@@ -116,15 +114,12 @@ By normalizing and decomposing using a singular value decomposition the document
 \end{center}
 Like previously mentioned $d_2$ is the most similar to $q$, because of the "pointing in the same general direction", which it now proven by having the highest value $cosine(d_2,q)=0.8897=max \{ cosine(d_i,q) | d_i \in D \} $ and also $d_8$ is the least similar with a value $cosine(d_8,q)=-0.6852=min\{cosine(d_i,q) | d_i \in D\}$.
   
-
-%END LATENT SEMANTIC
 \section{Term Frequency - Inverse Document Frequency (tf-idf)}
-\label{ch:tf-idf}
-%BEGINN TERM FREQUENCY
+\label{sec:tf-idf}
 The \emph{term frequency - inverse document frequency} technique is a statistical technique to derive a feature to a given intension. It measures the importance of a term or multiple terms to documents by its frequency of appearing. The terms are terms of the intension of the feature that is wanted to be analyzed. In a simple way it can be described as: "the more frequent a term occurs in the document, the more relevant the document is to the term". \newline
 This is mathematically described as the $document frequency tf=(t,d)$, counting how often the term $t$ is contained in the document $d$.
 In our example the term $t_2 = save$ appears in $d_3$ once and the term $t_1 = automatic$ doesn't appear at all so: $tf(t_2,d_3) = 1$ and $tf(t_1,d_3)=0$. \newline
-Doing that for the terms $t_1 = automatic, t_2 = save$ and $t_3 = file$ and the documents $d_1$ to $d_8$ we get the matrix shown in Fig.~\ref{term-document-matrix}.
+Doing that for the terms $t_1 = automatic, t_2 = save$ and $t_3 = file$ and the documents $d_1$ to $d_8$ we get the matrix shown in \autoref{pic:term-document-matrix}.
 The main problem of this technique is, that uninformative terms appearing within a document-set, often referred as \emph{corpus} and shortened by $D$, maybe even multiple times can distract from terms, which are mentioned less frequent but are more relevant. To compensate that, the technique relativizes by calculating how many documents contain the term and normalizing it. If it's a commonly used term shared by many documents this term can't be taken as a measurement to differentiate between documents. Or colloquially "the more documents include a term, the less this term discriminates between documents". \newline
 So the so-called \emph{inverse document frequency (idf(t))} is calculated as
 \begin{center} $idf(t) = log((|D|)/|\{ d \in D | t \in d \}|)$  \end{center}
@@ -141,7 +136,7 @@ Regarding our example we can compute the $idf$ of our terms:
  \end{tabular}
 \end{table}
 
-Like in the example if the focus isn't on one term but on a set of terms the \emph{tf-idf(t,d)} values to a document $d$ are added up. So finally the matrix can be derived as it is shown in Table \ref{tab:tfidf_table}.
+Like in the example if the focus isn't on one term but on a set of terms the \emph{tf-idf(t,d)} values to a document $d$ are added up. So finally the matrix can be derived as it is shown in Table \ref{table:tfidf_table}.
 
 \begin{table}[h]
   \centering
@@ -153,15 +148,13 @@ Like in the example if the focus isn't on one term but on a set of terms the \em
     $t_3 = file $ & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline \hline
     $\sum\nolimits_{i=1}^3$\emph{tf-idf}$(t_i,d_j)$ & 0.727 & 1.454 & 0.1249 & 0 & 0.1249 & 0.1249 & 0.1249 & 0\\ \hline
   \end{tabular}
-  \label{tab:tfidf_table}
   \caption{Term Frequency - Inverse Document Frequency}
+  \label{table:tfidf_table}
 \end{table}
 
-%END TERM FREQUENCY
 \section{Hyper Link Induced Topic Search (HITS)}
-%BEGIN HITS
 \label{sec:HITS}
-The \emph{Hyper Link Induced Topic Search} (short: \emph{HITS}) is a page ranking algorithm for web mining\footnote{\label{foot:1}web mining is the analysis step of the knowledge discovery in databases process within the World Wide Web CITE}, which is the counterpart of the famous \emph{Google Page Rank}-algorithm and is currently used by the \emph{Ask Search Engine} \cite{wiki:HITS}. Its basically used to get websites that correspond best to a given input, like every search engine. 
+The \emph{Hyper Link Induced Topic Search} (short: \emph{HITS}) is a page ranking algorithm for web mining\footnote{web mining is the analysis step of the knowledge discovery in databases process within the World Wide Web CITE}, which is the counterpart of the famous \emph{Google Page Rank}-algorithm and is currently used by the \emph{Ask Search Engine} \cite{wiki:HITS}. Its basically used to get websites that correspond best to a given input, like every search engine. 
 The \emph{HITS}-algorithm distinguishes between two forms of web pages, which aren't necessarily disjoint:
 \begin{enumerate}
   \item hub \newline
@@ -214,13 +207,13 @@ The normalized values satisfy the condition, that $\sum\nolimits_{\{(p,H_p,A_p) 
   \draw[edge] (p8)  to (p7);
   \end{tikzpicture}
   \caption{The graph G}
-  \label{hits_graph_g}
+  \label{graph:HITS - before first interation}
 \end{wrapfigure}
 
 Applying the \emph{HITS}-algorithm to program code hubs can be colloquially described as methods, that call many other methods, and authority's can be described as methods, that implement a function.\newline
-In the Freemind Example the first graph will look very similar to the class diagram, as it is shown in Fig ~\ref{hits_graph_g}. The class \#i will refer to page $p_i$.
-After transferring it into the graph of the form of $G'$ and after the first iteration the graph looks like Fig.~\ref{hits_graph_g}. \newline
-Including the normalization the graph $G'$ looks like Fig.~\ref{hits_graph_after_first_iteration}. The normalization was done by calculating for every $H_p$ and $A_p$ of a page $p$ as:\newline
+In the Freemind Example the first graph will look very similar to the class diagram, as it is shown in \autoref{graph:HITS - before first interation}. The class \#i will refer to page $p_i$.
+After transferring it into the graph of the form of $G'$ and after the first iteration the graph looks like \autoref{graph:HITS - before first interation}. \newline
+Including the normalization the graph $G'$ looks like \autoref{graph:HITS - after first iteration}. The normalization was done by calculating for every $H_p$ and $A_p$ of a page $p$ as:\newline
 \begin{center}
   \begin{tabular}{ r c l }
     $H_p$ & = &$H_p / \sqrt{1^2+0^2+1^2+1^2+1^2+2^2+0^2+2^2} = H_p/ \sqrt{12}$ and \\
@@ -253,10 +246,9 @@ Including the normalization the graph $G'$ looks like Fig.~\ref{hits_graph_after
   \draw[edge] (p8)  to (p7);
   \end{tikzpicture}
   \caption{G' after the first iteration with normalizing the scores}
-  \label{hits_graph_after_first_iteration}
+  \label{graph:HITS - after first iteration}
 \end{figure}
 
-%END HITS
 %\clearpage
 
 

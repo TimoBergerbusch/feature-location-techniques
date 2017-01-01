@@ -12,4 +12,5 @@
 \contentsline {section}{\numberline {5.3}Dynamic - Plain}{16}{section.5.3}
 \contentsline {section}{\numberline {5.4}Dynamic - Guided}{17}{section.5.4}
 \contentsline {section}{\numberline {5.5}Future Technique Approaches}{18}{section.5.5}
-\contentsline {chapter}{Literaturverzeichnis}{19}{figure.5.2}
+\contentsline {chapter}{\numberline {6}Conclusion}{21}{chapter.6}
+\contentsline {chapter}{Literaturverzeichnis}{23}{chapter.6}
