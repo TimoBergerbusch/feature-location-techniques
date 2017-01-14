@@ -5,31 +5,30 @@ To understand how feature location techniques work it is important to understand
 
 \section{Formal Concept Analysis (FCA)}
 \label{sec:FCA}
-\begin{wrapfigure}[20]{h}{0.5\textwidth}
-	\vspace{-1em}
-  \centering
+\emph{Formal Concept Analysis} (short: \emph{FCA}) is a predominantly mathematical approach to identify groups of classes and methods compared by the sharing of attributes. Therefor the \emph{FCA} regards the binary relation between all objects and attributes and therefor can also provide a model to analyze hierarchy, because hierarchy structures often have similar relations. 
+\begin{wrapfigure}[16]{r}{0.45\textwidth}
   \fbox{
   \begin{tikzpicture}
    % nodes
    \node[block] (a) {$\sigma_1$ = MindMapMapModel.doAutomaticSave.run()};
    \node[block] (b)  [below of=a, node distance = 2 cm] {\color{gray}Mind \color{red}Map \color{blue}Model \color{yellow}do \color{green}Automatic \color{purple}Save \color{orange}run};
    \node[block] (c)  [below of=b, node distance = 2 cm] {\color{gray}mind \color{red}map \color{blue}model \color{yellow}do \color{green}automatic \color{purple}save \color{orange}run};
-   \node[table] (d)  [below of=c, node distance = 3.5 cm] {
-%		  \begin{center}
-		    \begin{tabular}{| l | c |}
-		      \hline
-		      & $\sigma_1$ \\ \hline
-		      \color{gray}mind & \checkmark \\ \hline
-		      \color{red}map & \checkmark \\ \hline
-		      \color{blue}model & \checkmark \\ \hline
-		      \color{yellow}do & \checkmark \\ \hline
-		      \color{green}automatic & \checkmark \\ \hline
-		      \color{purple}save & \checkmark \\ \hline
-		      \color{orange}run & \checkmark \\ \hline
-		      \color{black} other &  \\ \hline
-		    \end{tabular}
-%		  \end{center}
-		};
+   \node[block] (d)  [below of=c, node distance = 3.5 cm] {
+  \begin{center}
+    \begin{tabular}{| l | c |}
+      \hline
+      & $\sigma_1$ \\ \hline
+      \color{gray}mind & \checkmark \\ \hline
+      \color{red}map & \checkmark \\ \hline
+      \color{blue}model & \checkmark \\ \hline
+      \color{yellow}do & \checkmark \\ \hline
+      \color{green}automatic & \checkmark \\ \hline
+      \color{purple}save & \checkmark \\ \hline
+      \color{orange}run & \checkmark \\ \hline
+      \color{black} other &  \\ \hline
+    \end{tabular}
+  \end{center}
+};
 
    % edges
    \draw[->] (a) -- node[right] {1. declare every $w_i$} (b);
@@ -39,7 +38,8 @@ To understand how feature location techniques work it is important to understand
   \caption{\#1 of the Freemind Example as example}
   \label{graph:FCA-flowchart}
 \end{wrapfigure}
-\emph{Formal Concept Analysis} (short: \emph{FCA}) is a predominantly mathematical approach to identify groups of classes and methods compared by the sharing of attributes. The \emph{FCA} regards the binary relation between all objects and attributes and therefore can also provide a model to analyse the hierarchy, because hierarchy structures often have similar relations. \newline
+
+
 The \emph{FCA}'s goal is to define so called \emph{concepts}. A \emph{concept} is a tuple of extension, the objects that belong to a concept, and intension, all the attributes that \underline{every} object of the extension has.
 In order to be able to derive such a \emph{concept} the \emph{FCA} creates an incidence table. The table can be derived in 3 steps as seen in \autoref{graph:FCA-flowchart}:
 \begin{enumerate}
