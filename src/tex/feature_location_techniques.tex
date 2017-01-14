@@ -5,10 +5,9 @@
 
 % Die Logos sind veraltet und duerfen zurzeit nicht verwendet werden!
 % Auf Seite \pageref{Logo} in Abbildung \ref{Logo} befindet sich das SE Logo.
-In this chapter we want to look at four different feature location techniques in detail. We choose two static and two dynamic techniques with each one technique giving plain and one giving guided output. The techniques presented in the following can be classified by the characteristics of chapter\ref{ch:Classification and Methodology}:
+In this chapter deals with five different feature location techniques in detail. They are defined as two static and two dynamic techniques with each one technique giving plain, one giving guided output and the static plain technique \emph{SNAIFL} as a special case. The techniques presented in the following can be classified by the characteristics of \autoref{ch:Classification and Methodology}:
 
 \begin{table}[h]
-	\hspace{-3em}
 	\begin{tabular}{|l| l l l l l l|}
 		\hline
 		 & technique &  output & underlying & input & result & user \\ 
@@ -22,8 +21,8 @@ In this chapter we want to look at four different feature location techniques in
 		 & Dora & guided & PDA, tf-idf & method, depth & call graph & + \\ 
 		 &      &        &             & query         & documents  &   \\ \hline
 		 \multirow{4}{1em}{\begin{sideways} dynamic \end{sideways}}
-		 & Software Reconnaissance  & plain & FCA, PDA & set of & executable & +++ \\ 
-		 &   &  &  & scenarios, query & & \\
+		 & Software & plain & FCA, PDA & set of & executable & +++ \\ 
+		 & Reconnaissance &  &  & scenarios, query & & \\
 		 & Revelle  & guided & trace analysis & scenario and & executable, & +\\
 		 &   &  & LSI, HITS & query & documents & \\ \hline
 		
@@ -34,10 +33,10 @@ In this chapter we want to look at four different feature location techniques in
 
 \section{Static - Plain}
 \label{sec:find-concept}
-As an example of a static technique with plain output the \emph{Find-concept (short FC)} of David Shepherd, Emily Hill, K. Vijay-Shanker and Lori Pollock of the University of Delaware and also Martin P. Robillard of the McGill University in Canada is a reasonable choice
-The technique makes, as previously mentioned in Chapter \ref{ch:Classification and Methodology}, some assumptions to the underlying code. To apply \emph{FC} the code has to be object-oriented, the comments and identifiers, which are objects and methods, have to be named in a way so that the technique can retrieve domain knowledge. Also it makes the premise that verbs correspond to methods and nouns refer to objects. Also FC defines so called \textit{direct objects}, which are objects corresponding to a verb. In our example the verb $save$ corresponds to $MindMapMapModel$, $MindMapNodeModel$ and $MindMapEdgeModel$, which are therefore the direct objects of $save$.\newline
+As an example of a static technique with plain output the \emph{Find-concept (short FC)} of David Shepherd, Emily Hill, K. Vijay-Shanker and Lori Pollock of the University of Delaware and also Martin P. Robillard of the McGill University in Canada is a reasonable choice \cite{shepherd2007using}.
+The technique makes, as previously mentioned in \autoref{ch:Classification and Methodology}, some assumptions to the underlying code. To apply \emph{FC} the code has to be object-oriented, the comments and identifiers, which are objects and methods, have to be named in a way so that the technique can retrieve domain knowledge. Also it makes the premise that verbs correspond to methods and nouns refer to objects. Also FC defines so called \textit{direct objects}, which are objects corresponding to a verb. In our example the verb $save$ corresponds to $MindMapMapModel$, $MindMapNodeModel$ and $MindMapEdgeModel$, which are therefore the direct objects of $save$.\newline
 \emptyLine
-The input to the FC is given by the user as a query of description phrases of the feature of interest and after that decomposed into a set of \textit{verb-DO} pairs. In order to improve the result the technique collects related words,like synonyms or verbs in different time forms, and also regards words, which are often mentioned in the context of words from the query. These collected words then get ranked by their similarity to the query words with for example LSI (\autoref{sec:LSI}), calculating with a variable weight for the synonyms, and the ten most analogous are presented to the user to augment the query with these terms and program methods already matching to the current query.\newline
+The input to the FC is given by the user as a query of description phrases of the feature of interest and after that decomposed into a set of \textit{verb-DO} pairs. In order to improve the result the technique collects related words, like synonyms or verbs in different time forms, and also regards words, which are often mentioned in the context of words from the query. These collected words then get ranked by their similarity to the query words using LSI (\autoref{sec:LSI}), calculating with a variable weight for the synonyms, and the ten most analogous are presented to the user to augment the query with these terms and program methods already matching to the current query.\newline
 \emptyLine
 The important aspect the user wants to retrieve are the \textit{verb-DO} pairs matching the query. To be able to derive the matching pairs the FC builds an \textit{action-oriented identifier graph model (AOIG)}. The \textit{AOIG} contains four kinds of nodes and 2 types of edges:
 %\vspace{3em} %WARNING: may be shitty
@@ -46,11 +45,15 @@ The important aspect the user wants to retrieve are the \textit{verb-DO} pairs m
 	\begin{tabular}{r l}
 		\textit{verb nodes}: & a node for each specific verb/action \\
 		\textit{direct object (DO) nodes}: & a node for each direct object \\
-		\textit{verb-DO nodes}: & a node for every \textit{verb-Do} pair. (A \textit{DO} can be in multiple \textit{verb-DO} nodes) \\
-		\textit{use nodes}: & a node for each incidence of a \textit{verb-DO} pair in comments or the source code \\
+		\textit{verb-DO nodes}: & a node for every \textit{verb-Do} pair. \\
+		&(A \textit{DO} can be in multiple \textit{verb-DO} nodes) \\
+		\textit{use nodes}: & a node for each incidence of a \textit{verb-DO} pair in comments \\
+		& or the source code \\
 		 & \\
-		\textit{pairing edges}: & connecting every verb and DO to the \textit{verb-DO nodes} containing them \\
-		\textit{use edges}: & connecting each \textit{verb-DO node} to every corresponding \textit{use node}.
+		\textit{pairing edges}: & connecting every verb and DO to the \textit{verb-DO nodes} \\
+		&containing them \\
+		\textit{use edges}: & connecting each \textit{verb-DO node} to every corresponding \\
+		& \textit{use node}.
 	\end{tabular}
 \end{table}
 
@@ -61,16 +64,16 @@ Due to the overhead of computing the \textit{verb-DO} pairs out of the query and
 
 \section{Static - Guided}
 \label{sec:Dora}
-The technique presented by \emph{Emily Hill, Lori Pollock} and \emph{K. Vijay-Shanker}, professors of the \textit{University of Delaware} in  \textit{Computer and Information Science}, is named \emph{Dora the Program Explorer} (short: \emph{Dora}})\footnote{Dora comes from exploradora, the Spanish word for a female explorer\cite{hill2007exploring}. Also the name chosen in account of the children's series "\textit{Dora the Explorer}" }.
-Dora also uses a call graph $G=(V,E)$ to derive dependency, like the \emph{Find-concept} in section~\ref{sec:find-concept}, but combines it with the \emph{tf-idf} ranking method explained in \autoref{sec:tf-idf} with the methods as nodes $n \in V$, it's body as the documents $d(n)$ and edges $e=(n,m) \in E$ if $n$ calls $m$. \newline
-As an input the user has to yield an initial query, a so called \textit{seed method}$ n_0 \in V$ the examination should start from, and a depth defining a graph-neighbourhood, which should be included in the search(i.e. a maximal distance). \newline
-Given the input Dora proceeds by traversing through the call graph $G$ calculating how suitable the document $d(n)$ of the current node $n$ is by combining the succeeding three values:
+The technique presented by \emph{Emily Hill, Lori Pollock} and \emph{K. Vijay-Shanker}, professors of the \textit{University of Delaware} in  \textit{Computer and Information Science}, is named \emph{Dora the Program Explorer} (short: \emph{Dora}})\footnote{Dora comes from exploradora, the Spanish word for a female explorer\cite{hill2007exploring}. Also the name chosen in account of the children's series "\textit{Dora the Explorer}" }\cite{hill2007exploring}.
+Dora also uses a call graph $G=(V,E)$ to derive dependency, like the \emph{Find-concept} in \autoref{sec:find-concept}, but combines it with the \emph{tf-idf} ranking method explained in \autoref{sec:tf-idf} with the methods as nodes $n \in V$, it's body as the documents $d(n)$ and edges $e=(n,m) \in E$ if $n$ calls $m$. \newline
+As an input the user has to yield an initial query, a so called \textit{seed method} $ n_0 \in V$ the examination should start from, and a depth defining a graph-neighbourhood, which should be included in the search(i.e. a maximal distance). \newline
+Given the input, Dora proceeds by traversing through the call graph $G$ calculating how suitable the document $d(n)$ of the current node $n$ is by combining the succeeding three values:
 \begin{enumerate}
 	\item the \emph{tf-idf} score of the identifiers within the method name ($n$)
 	\item the \emph{tf-idf} score of the identifiers within the method body ($d(n)$)
 	\item a binary value to indicate if the method belongs to a library or is part of the user-made code
 \end{enumerate}
-Dora can be parametrized by the weight of these three components, for example the method name(1) should be more important than the method body(2) and if the method is out of a library it shouldn't be considered, which leads to the following formulae:
+Dora can be parametrized by the weight of these three components, for example the method name(1) should be more important than the method body(2) and if the method is out of a library it should not be considered, which leads to the following formulae:
 \begin{center}
 	$\quad s(n)= (1-b) * [ \frac{2}{3} $\emph{tf-idf}$(n) + \frac{1}{3}$\emph{tf-idf}$(d(n)) ]$
 \end{center} 
@@ -81,12 +84,12 @@ There are two more adjustable values: the relevance threshold($rt$) and explorat
 	\centering
 	\begin{tabular}{r c l}
 		$rt <= s(n)$ & $\rightarrow$ & the node is relevant\\
-		$et <= s(n) < rt$ & $\rightarrow$ & the node isn't relevant, but maybe it's neighbours \\
+		$et <= s(n) < rt$ & $\rightarrow$ & the node is not relevant, but maybe it's neighbours \\
 		$s(n) < et$ & $\rightarrow$ & the node can be neglected
 	\end{tabular}
 \end{table}
 
-In the case of 1 and 2 Dora traverses to the neighbourhood of the node, if it doesn't harm the the initial depth, and otherwise discards the node. So in finite steps of traversing through the call graph Dora has reached a point, where no additional elements need to be explored.\newline
+In the case of 1 and 2 Dora traverses to the neighbourhood of the node, if it does not harm the initial depth, and otherwise discards the node. So in finite steps of traversing through the call graph Dora has reached a point, where no additional elements need to be explored.\newline
 The result Dora computes is a subgraph $G'=(V',E')$ of the call graph, where $V' = \{ n \in V | et <= s(n) \}$, $E' = \{ (n,m) \in E | n,m \in V' \}$ and a function \newline
 \[
 	f: n\in V' \rightarrow \{0,1\},n \rightarrow 
@@ -98,17 +101,17 @@ The result Dora computes is a subgraph $G'=(V',E')$ of the call graph, where $V'
 \]
 This function can be described as a colouring of every \textit{relevant} node. The final output is the coloured sub-call-graph $G'$. \newline
 \emptyLine
-In the \textit{Freemind Example} of chapter \ref{ch:Freemind Example} the result can look different, by changing the parameters like the \textit{seed method}, the \textit{depth} or the \textit{threshold values}.
-Simplifying the method in the fact of disregarding the method body's and by knowing that every method called in the Graph \ref{pic:freemind callgraph} is user made, the scores are equal to their score in chapter \ref{table:tfidf_table}. \newline
+In the \textit{Freemind Example} of \autoref{ch:Freemind Example} the result can look different, by changing the parameters like the \textit{seed method}, the \textit{depth} or the \textit{threshold values}.
+Simplifying the method in the fact of disregarding the method body's and by knowing that every method called in the \autoref{pic:freemind callgraph} is user made, the scores are equal to their score in \autoref{table:tfidf_table}. \newline
 The threshold are chosen like the following:
 \begin{table}[h]
 	\centering
 	\begin{tabular}{r l}
 		$rt = 0.5$ & methods with a score of 0.5 or higher are considered relevant \\
-		$et = 0.1$ & methods with a score of 0.3 or higher should be explored further
+		$et = 0.1$ & methods with a score of 0.1 or higher should be explored further
 	\end{tabular}
 \end{table}
-So the final graph Dora computes looks like the \autoref{graph:Dora - result}. The green nodes are relevant to the feature, the grey nodes are explored but not relevant. The red node(\#2) is highly relevant to the feature with a \emph{tf-idf score} of 1.454, but isn't explored due to the \textit{depth} of 3.
+So the final graph Dora computes looks like the \autoref{graph:Dora - result}. The green nodes are relevant to the feature, the grey nodes are explored but not relevant. The red node(\#2) is highly relevant to the feature with a \emph{tf-idf score} of 1.454, but is not explored due to the \textit{depth} of 3.
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}
@@ -141,7 +144,7 @@ So the final graph Dora computes looks like the \autoref{graph:Dora - result}. T
 
 \section{Dynamic - Plain}
 \label{sec:Wilde}
-One of the most important dynamic plain approaches is the very first one of Norman Wilde and Michael Scully known under the term \emph{Software Reconnaissance}. \textit{Software Reconnaissance} tries to define a feature $f$ by getting two sets of scenarios $S_f$ and $\overline{S_f}$ as an input and distinguishing between scenarios that invoke the feature of interest $S$ and scenarios that don't $\overline{S_f}$. \newline
+One of the most important dynamic plain approaches is the very first one of Norman Wilde and Michael Scully known under the term \emph{Software Reconnaissance} \cite{wilde1995software}. \textit{Software Reconnaissance} tries to define a feature $f$ by getting two sets of scenarios $S_f$ and $\overline{S_f}$ as an input and distinguishing between scenarios that invoke the feature of interest $S$ and scenarios that do not $\overline{S_f}$. \newline
 Regarding the execution traces \textit{Software Reconnaissance} categorizes methods/lines of code $M$\footnote{the degree of fineness is chosen by the user} into three groups:
 \begin{table}[h]
 	\begin{tabular}{l}
@@ -170,23 +173,23 @@ This technique already requires voluminous overhead, because of the two sets of 
 \label{sec:Revelle}
 The dynamic guided technique by Meghan Revelle, Bogdan Dit and Denys Poshyvanyk, which are professors at the College of William and Mary in Virginia, is based on a chain of other techniques here and further named as the main author:
 \begin{center}
-	$Revelle \rightarrow Liu \rightarrow Poshyvanyk \rightarrow Marcus$
+	$Revelle \cite{revelle2010using} \rightarrow Liu \cite{liu2007feature} \rightarrow Poshyvanyk \cite{poshyvanyk2007feature} \rightarrow Marcus \cite{marcus2004semantic}$
 \end{center}
-The very base technique by Marcus is to take given an input query and convert it into a document in vector space using the in \autoref{sec:LSI} mentioned \textit{LSI}. The technique then separates different software elements, for example methods, and creates separate documents using the identifiers and also converting them into vector space. The identifiers are often separated using typical code style, like the connecting of two words using "\underline{ }" or changing from lower to upper case letters. In order to filter the result the search space in partitioned by refining the documents similarity values, so that in step $i+1$ are only the documents of step $i$, which are higher than a given threshold. After that the user decides which documents are relevant to the feature. Once the user decides that no further document is relevant to the feature the the algorithm terminates. \cite{marcus2004semantic} \newline
+The very base technique by Marcus is to take a given input query and convert it into a document in vector space using the in \autoref{sec:LSI} mentioned \textit{LSI}. The technique then separates different software elements, for example methods, and creates separate documents using the identifiers and also converting them into vector space. The identifiers are often separated using typical code style, like the connecting of two words using "\underline{ }" or changing from lower to upper case letters. In order to filter the result the search space in partitioned by refining the documents similarity values, so that in step $i+1$ are only the documents of step $i$, which are higher than a given threshold. After that the user decides which documents are relevant to the feature. Once the user decides that no further document is relevant to the feature the the algorithm terminates. \cite{marcus2004semantic} \newline
 %In addition to \textit{Marcus} \textit{Poshyvanyk} uses FCA \autoref{sec:FCA} to rank the documents after they are ranked on the similarity to the input query. \textit{Poshyvanyk} takes the first $n$ documents and ranks the \emph{uniquely} appearing terms in the documents based on the similarity the term and the corpus-document in a way, that terms, which are similar to terms in the $n$ documents but not in the rest, are ranked higher. On the other hand terms, which are similar to documents not being in the top $n$ documents, are penalized because might have identifiers for not relevant things with relevant names and therefore would distort the result. After ranking the unique terms \textit{Poshyvanyk} selects the top $k$ terms as \textit{attributes} out of the top $n$ documents, which are the \textit{objects}, and apply FCA \autoref{sec:FCA}. So the user gets not only the space vectors of the similarity of the documents, but also gets a visualization of the terms used within. \newline
-\textit{Poshyvanyk} uses a combination of \textit{Marcus} \textit{LSI} method and \textit{execution-trace analysis} \footnote{further information on that topic within the \textit{IEEE}-paper \cite{antoniol2006feature}}. To analyse a program is has to be given as an input in an executable form, to determine if which methods are called on a scenario, and a set of documents, which can be defines out of a query with \textit{Marcus}. Also the technique needs two sets of scenarios: one that invoke the feature of interest and one that doesn't. First the technique ranks the documents like within \textit{Marcus}. After that the scenario sets are executed and execution profiles are derived. By that the methods can be ranked by the appearance within the traces of the scenarios that execute the feature versus the appearance within the other scenarios. The final result of a method is a weighted sum of the \textit{LSI}-rank and the \textit{trace}-rank. So the final output is the again a ranked list of methods. \cite{poshyvanyk2007feature} \newline
+\textit{Poshyvanyk} uses a combination of \textit{Marcus} \textit{LSI} method and \textit{execution-trace analysis} \footnote{further information on that topic within the \textit{IEEE}-paper \cite{antoniol2006feature}}. To analyse a program it has to be given as an input in an executable form, to determine which methods are called on a scenario, and a set of documents, which can be defined out of a query with \textit{Marcus}. Also the technique needs two sets of scenarios: one that invoke the feature of interest and one that does not. First the technique ranks the documents like within \textit{Marcus}. After that the scenario sets are executed and execution profiles are derived. By that the methods can be ranked by the appearance within the traces of the scenarios that execute the feature versus the appearance within the other scenarios. The final result of a method is a weighted sum of the \textit{LSI}-rank and the \textit{trace}-rank. So the final output is the again a ranked list of methods. \cite{poshyvanyk2007feature} \newline
 The technique \textit{Liu} is quite similar to \textit{Poshyvanyk}, with the difference, that instead of using two sets of scenarios \textit{Liu} only works with a single scenario executing the feature of interest. This reduces the overhead of input and also accelerates the process, accepting the fact that the result may not be as accurate as it would be with \textit{Poshyvanyk}. \cite{liu2007feature} \newline
 The technique \textit{Revelle} combines \textit{Information Retrieval}, \textit{dynamic} and \textit{web-mining} analysis in order to improve the results of the previous methods. Like \textit{Liu} \textit{Revelle} gets a single scenario that exercises the feature of interest and a query as input. While running the scenario the call graph from the execution trace is constructed, which nodes are methods that are actually executed. Every node gets a score using a web-mining algorithm like the HITS-algorithm mentioned in \autoref{sec:HITS}. After assigning the values \textit{Revelle} filters one of the following two out:
 \begin{itemize}
 	\item low-ranked methods 
 	\begin{itemize}
 		\item typically used on \textit{HITS authority score}
-		\item methods that aren't called often aren't extremely important
+		\item methods that are not called often are not extremely important
 	\end{itemize}
 	\item high-ranked methods 
 	\begin{itemize}
 		\item typically used on \textit{HITS hub score}
-		\item  methods that call very many other methods aren't meaningful
+		\item  methods that call very many other methods are not meaningful
 	\end{itemize}
 \end{itemize} 
 The remaining set of methods get ranked by using \textit{Liu} and the final ranked list is returned to the user.
@@ -194,8 +197,8 @@ The overall user interaction is quite sparely, because of one scenario and a que
 
 \section{Future Technique Approaches}
 \label{sec:SNIAFL}
-All of the presented techniques are still under research to improve the results accuracy, the runtime and the amount of user interaction. Even if the last point isn't that important in the beginning is can be the most essential due to the possibility of high serialisation. Also the generally preferred technique group is the static one, because of the high amount of pre-computing used to derive scenarios and checking if they invoke the feature and the execution time used to run these.\newline
-\textit{W. Zhao, L. Zhang, J. Sun and F. Yang} from the University of Peking in cooperation with \textit{L. Yin} of the Rensselaer Polytechnic Institute are working on an approach of a \textit{static non-interactive} technique by using \textit{Program Dependency Analysis} and \textit{Information Retrieval} technologies.\newline
+All of the presented techniques are still under research to improve the results accuracy, the runtime and the amount of user interaction. Even if the last point is not that important in the beginning is can be the most essential due to the possibility of high serialisation. Also the generally preferred technique group is the static one, because of the high amount of pre-computing used to derive scenarios and checking if they invoke the feature and the execution time used to run these.\newline
+\textit{W. Zhao, L. Zhang, J. Sun and F. Yang} from the University of Peking in cooperation with \textit{L. Yin} of the Rensselaer Polytechnic Institute are working on an approach of a \textit{static non-interactive} technique by using \textit{Program Dependency Analysis} and \textit{Information Retrieval} technologies \cite{zhao2006sniafl}.\newline
 They define two types of functions of a feature:
 \begin{enumerate}
 	\item \textit{specific functions}:
@@ -204,7 +207,7 @@ They define two types of functions of a feature:
 	functions involved in the implementation of the feature
 \end{enumerate}
 The set of \textit{specific features} is indisputable a subset of the set of \textit{ relevant features}.
-The presentation of the program within the technique is realized with a so called \textit{Branch-Reserving Call Graph (BRCG)}, which is a a normal call graph expanded with branching and sequential information. These informations can be used to construct pseudo execution traces for a feature. The \textit{BRCG} can be written as $G=(V,E)$ with the nodes $V$ as a function, a branch or a return statement. Loops are defined as two branch statements: one going through the loop body and one exiting immediately.
+The presentation of the program within the technique is realized with a so called \textit{Branch-Reserving Call Graph (BRCG)}, which is a normal call graph expanded with branching and sequential information. These informations can be used to construct pseudo execution traces for a feature. The \textit{BRCG} can be written as $G=(V,E)$ with the nodes $V$ as a function, a branch or a return statement. Loops are defined as two branch statements: one going through the loop body and one exiting immediately.
 
 %\begin{figure}[hbt]{0.5*\textwidth}
 %	\lstset{language=Java}
@@ -268,11 +271,11 @@ The presentation of the program within the technique is realized with a so calle
 \end{minipage}
 In \autoref{graph:BRCG} is shown an example graph for the example code of \autoref{lst:code}, with $f1$ to $f6$ being function. The nodes $func, B1, B2$ and $B4$ are \textit{sequential} of code, which indicate a sequence of other nodes following, while $BS1$ and $BS2$ are \textit{branching} nodes indicating a conditional-based decision, like an if-statement or a \textit{while}-loop. $RS$ is a \textit{return}-statement and $B3$ is the automatic \textit{exit}-statement previously mentioned.\newline
 As an input the technique takes textual paragraphs for every feature, which can be derived by the requirements documentation. These paragraphs are converted into documents using the code style  like in \autoref{sec:Wilde} and normalizing\footnote{in general converting to lower case alphabetical letters} the terms. Also \textit{FCA} (\autoref{sec:FCA}) will be used to convert the methods into queries. \newline
-After deriving the documents and queries the technique uses a special \textit{LSI} variation to convert these two sets to a vector space and measure the similarity using the $cosine$. The speciality of this variation is, that the weights of the terms, defining which terms are more important than others, aren't given by the user or chosen equally balanced, but are also computed using \textit{tf-idf} (\autoref{sec:tf-idf}).\newline
+After deriving the documents and queries the technique uses a special \textit{LSI} variation to convert these two sets to a vector space and measure the similarity using the $cosine$. The speciality of this variation is, that the weights of the terms, defining which terms are more important than others, are not given by the user or chosen equally balanced, but are also computed using \textit{tf-idf} (\autoref{sec:tf-idf}).\newline
 After these steps the technique has a ranked list $L_d$ of queries(functions) for every document $d$ (feature) ranked by their similarity. Within every list is a pair of queries $p$ with the largest difference so $p^d = max\{ (q^d_i, q^d_{(i+1)}) \in L_d | p^d_i - p^d_{(i+1)} \}$, called \textit{division point}. Every function before the \textit{division point} are considered \textit{initial specific functions} to the feature. \newline
-The next step is to traverse the \textit{BRCG} and cut off every branch that doesn't contain any of the \textit{initial specific functions}, considered to be not relevant to the feature. Vice versa every other function is marked as relevant. So a pseudo-execution can be given to the user as a traversing through the trimmed \textit{BRCG}.\newline
+The next step is to traverse the \textit{BRCG} and cut off every branch that does not contain any of the \textit{initial specific functions}, considered to be not relevant to the feature. Vice versa every other function is marked as relevant. So a pseudo-execution can be given to the user as a traversing through the trimmed \textit{BRCG}.\newline
 
-Overall the technique is based on a high amount of computation but works without a single input. \textbf{But} in reality the requirements documentation and comments aren't enough to generate that much knowledge about the features, that they can be derived satisfyingly. So the technique works on programs that are written in a certain way, which isn't the final solution but is an approach leading the way.
+Overall the technique is based on a high amount of computation but works without a single input. \textbf{But} in reality the requirements documentation and comments are not enough to generate that much knowledge about the features, that they can be derived satisfyingly. So the technique works on programs that are written in a certain way, which is not the final solution but is an approach leading the way.
 
 
 
