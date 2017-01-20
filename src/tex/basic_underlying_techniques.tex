@@ -45,10 +45,11 @@ In order to be able to derive such a \emph{concept} the \emph{FCA} creates an in
 \begin{enumerate}
   \item declaring every word in the objects and methods as $w_i$ to a new $i$ if the word is not already defined
   \item decapitalizing every $w_i$
-  \item creating the table with every decapitalize word as a row and every $\sigma$ as a column. The cells $c_ij$ are checked if  $\sigma$ contains the word $w_i$
+  \item creating the table with every decapitalize word as a row and every $\sigma_i$ as a column. The cells $c_{ij}$ are checked if  $\sigma_i$ contains the word $w_i$
 \end{enumerate}
 \pagebreak
 \begin{figure}
+	\vspace{-2em}
     \centering
     \begin{tabular}{| l | c | c | c | c | c | c | c | c |}
       \multicolumn{1}{c}{objects} & \multicolumn{1}{c}{$\sigma_1$} & \multicolumn{1}{c}{$\sigma_2$} & \multicolumn{1}{c}{$\sigma_3$} & \multicolumn{1}{c}{$\sigma_4$} & \multicolumn{1}{c}{$\sigma_5$} & \multicolumn{1}{c}{$\sigma_6$} & \multicolumn{1}{c}{$\sigma_7$} & \multicolumn{1}{c}{$\sigma_8$} \\ 
@@ -70,8 +71,8 @@ In order to be able to derive such a \emph{concept} the \emph{FCA} creates an in
     \end{tabular}
      \caption{The complete incidence table of the Freemind Example}
      \label{table:FCA-finaltable}
+     \vspace{-1em}
 \end{figure}
-
 Keeping the method numbers as defined in \autoref{ch:Freemind Example}  \autoref{table:FCA-finaltable} is the result. Mathematically it leads to defining $O$ as a set of objects, $A$ as a set of attributes and $R$ as the set of relations $r = (o,a) \; o\in O,a\in A$ as derivable of the table. Also defining \newline
 $\sigma(O) = \{a \in A | (o,a) \in R, \forall o \in O \}$  \quad "all attributes that every $o\in O$ has" \newline
  $\rho(A)= \{o\in O|(o,a)\in R, \forall a\in A \}$  \quad "all objects that every $a\in A$ has" \newline
@@ -85,26 +86,26 @@ From there it is simple to see, that the set of all concepts $C$ is a partial or
   \end{tabular}
 \end{center}
 \vspace{-1em}
-$(O_1,A_1)$ is called the \emph{subconcept} of his corresponding \emph{superconcept} $(O_2,A_2)$. \newline
-Which leads to the definition that $C, \le$ form a concept lattice and in the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) it's a taxonomy of name tokens.
-
+$(O_1,A_1)$ is called the \emph{subconcept} of it's corresponding \emph{superconcept} $(O_2,A_2)$. \newline
+Which leads to the definition that $C, \le$ form a concept lattice and in the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) it's a taxonomy of name tokens. 
 \section{Latent Semantic Indexing (LSI)}
 \label{sec:LSI}
-\begin{wrapfigure}[17]{l}{0.5\textwidth}
+\begin{wrapfigure}[14]{l}{0.5\textwidth}
+	\vspace{-2em}
   \centering
   \includegraphics[width=\linewidth]{src/pic/term_document_matrix}
   \caption{The term-document matrix}
   \label{pic:term-document-matrix}
 \end{wrapfigure}
-The \emph{Latent Semantic Indexing}(short: \emph{LSI}) is an automatic statistical technique. It derives to a given document a vector representation of the query and the corpus by creating a term-document matrix of co-occurring terms. A term $t_i$ is a word, as a tokenized and de-capitalized word of the methods ordered alphabetically and is represented in a row of the matrix. A document $d_j$, which are in the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) the different method- and class names, are represented as the columns of the matrix. So the matrix, shown in \autoref{pic:term-document-matrix}, looks very similar to the table of FCA (\autoref{table:FCA-finaltable}) with the difference of an unsigned integer value $v_ij$, representing how often a document $d_j=MindMapMapModel.doAutomaticSave.run()$ contains token $t_i$, i.e. $d_1$ contains the token $t_7=map$ twice, but the token $t_2=automatic$ only once and does not contain $t_1=action$ at all. Also a query \emph{q} is given, which has a \emph{1} at the terms \emph{automatic}, \emph{save} and \emph{file} representing the feature that should be analysed. 
-
-\begin{wrapfigure}[15]{l}{0.5\textwidth}
+The \emph{Latent Semantic Indexing}(short: \emph{LSI}) is an automatic statistical technique. It derives to a given document a vector representation of the query and the corpus by creating a term-document matrix of co-occurring terms. A term $t_i$ is a word, as a tokenized and de-capitalized word of the methods ordered alphabetically and is represented in a row of the matrix. A document $d_j$, which is in the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) a method- or class name, is represented as a column of the matrix. So the matrix, shown in \autoref{pic:term-document-matrix}, looks very similar to the table of FCA (\autoref{table:FCA-finaltable}) with the difference of an unsigned integer value $v_{ij}$, representing how often a document $d_j=MindMapMapModel.doAutomaticSave.run()$ contains token $t_i$, i.e. $d_1$ contains the token $t_7=map$ twice, but the token $t_2=automatic$ only once and does not contain $t_1=action$ at all. Also a query \emph{q} is given, which has a \emph{1} at the terms \emph{automatic}, \emph{save} and \emph{file} representing the feature that should be analysed. 
+\begin{wrapfigure}[16]{l}{0.5\textwidth}
   \centering
   \includegraphics[width=\linewidth]{src/pic/lsf-vectors}
   \label{pic:lsi_vectors}
   \caption{The vector representation of the documents $d_j$ and the query $q$ from the Freemind Example~\ref{ch:Freemind Example}}
 \end{wrapfigure}
-By normalizing and decomposing using a singular value decomposition the documents can be put into vector representation so that every document has a vector representing their equality to the query $q$. Taking the $cosine()$ of the query $q$ and a document $d_j$ it is possible to measure the similarity. If a document and a query are equal the spreading angle would be $0$ and therefore the best possible similarity is given by $cosine(0)=1$. Also the worst possible angle is $180$, which is equal to document "pointing in the opposite direction", and therefore the worst similarity is given by $cosine(180)=-1$. The common interpretation of the values, regarding that $D$ is the set of all documents, is, that the set $\{d_i \in D| cosine(d_i,q) \ge 0 \} \subseteq D$ are considered to be a related to the query of interest, hence every other document is not. It's simple to see that a document is more similar if it points in the same general direction as the query, because of the shared terms. In the Freemind Example the document $d_2=\color{red}MindMapMapModel\color{black}.\color{red}do\color{green}AutomaticSave\color{black}.\color{red}do\color{green}AutomaticSave\color{black}$ is the most similar to the query $q=\color{green}automaticSaveFile\color{black}$, while $d_8=\color{red}MindMapController\color{black}.\color{red}actionPerformed\color{black}$ is the least similar.
+
+By normalizing and decomposing using a singular value decomposition the documents can be put into vector representation so that every document has a vector representing their equality to the query $q$. Taking the $cosine()$ of the query $q$ and a document $d_j$ it is possible to measure the similarity. If a document and a query are equal the spreading angle would be $0$ and therefore the best possible similarity is given by $cosine(0)=1$. Also the worst possible angle is $180$, which is equal to document "pointing in the opposite direction", and therefore the worst similarity is given by $cosine(180°)=-1$. We define $cosine(a,b)=\frac{a \cdot b}{||a||*||b||}$ to measure the similarity of two vectors. The common interpretation of the values, regarding that $D$ is the set of all documents, is, that the set-elements $\{d_i \in D| cosine(d_i,q) \ge 0 \} \subseteq D$ are considered to be related to the query of interest, hence every other document is not. It's simple to see that a document is more similar if it points in the same general direction as the query, because of the shared terms. In the Freemind Example the document $d_2=\color{red}MindMapMapModel\color{black}.\color{red}do\color{green}AutomaticSave\color{black}.\color{red}do\color{green}AutomaticSave\color{black}$ is the most similar to the query $q=\color{green}automaticSaveFile\color{black}$, while $d_8=\color{red}MindMapController\color{black}.\color{red}actionPerformed\color{black}$ is the least similar.
 \begin{center}
   \begin{tabular}{ c c c c c c c c }
     \hline
@@ -121,7 +122,7 @@ The \emph{term frequency - inverse document frequency} technique is a statistica
 This is mathematically described as the $document frequency$ $tf=(t,d)$, counting how often the term $t$ is contained in the document $d$.
 In the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) the term $t_2 = save$ appears in $d_3$ once and the term $t_1 = automatic$ does not appear at all so: $tf(t_2,d_3) = 1$ and $tf(t_1,d_3)=0$. \newline
 Doing that for the terms $t_1 = automatic, t_2 = save$ and $t_3 = file$ and the documents $d_1$ to $d_8$ the matrix shown in \autoref{pic:term-document-matrix} can be derived.
-The main problem of this technique is, that uninformative terms appearing within a document-set, often referred as \emph{corpus} and shortened by $D$, maybe even multiple times can distract from terms, which are mentioned less frequent but are more relevant. To compensate that, the technique relativizes by calculating how many documents contain the term and normalizing it. If it's a commonly used term shared by many documents this term ca not be taken as a measurement to differentiate between documents. Or colloquially "the more documents include a term, the less this term discriminates between documents ". \newline
+The main problem of this technique is, that uninformative terms appearing within a document-set, often referred as \emph{corpus} and shortened by $D$, maybe even multiple times can distract from terms, which are mentioned less frequent but are more relevant. To compensate that, the technique relativizes by calculating how many documents contain the term and normalizing it. If it's a commonly used term shared by many documents this term can not be taken as a measurement to differentiate between documents. Or colloquially "the more documents include a term, the less this term discriminates between documents ". \newline
 So the so-called \emph{inverse document frequency (idf(t))} is calculated as
 \begin{center} $idf(t) = log((|D|)/|\{ d \in D | t \in d \}|)$  \end{center}
 with $D$ still being the set of documents. And the final \emph{term frequency - inverse document frequency} is the multiplication of both scores, so:
@@ -155,7 +156,7 @@ Like in the example if the focus is not on one term but on a set of terms the \e
 
 \section{Hyperlink Induced Topic Search (HITS)}
 \label{sec:HITS}
-The \emph{Hyper Link Induced Topic Search} (short: \emph{HITS}) is a page ranking algorithm for web mining\footnote{web mining is the analysis step of the knowledge discovery in databases process within the World Wide Web CITE}, which is the counterpart of the famous \emph{Google Page Rank}-algorithm and is currently used by the \emph{Ask Search Engine} \cite{wiki:HITS}. Its basically used to get websites that correspond best to a given input, like every search engine. 
+The \emph{Hyper Link Induced Topic Search} (short: \emph{HITS}) is a page ranking algorithm for web mining\footnote{web mining is the analysis step of the knowledge discovery in databases process within the World Wide Web CITE}, which is the counterpart of the famous \emph{Google Page Rank}-algorithm and is currently used by the \emph{Ask Search Engine} \cite{wiki:HITS}. It's basically used to get websites that correspond best to a given input, like every search engine. 
 The \emph{HITS}-algorithm distinguishes between two forms of web pages, which are not necessarily disjoint:
 \begin{enumerate}
   \item hub \newline
@@ -216,8 +217,8 @@ The normalized values satisfy the condition, that \newline
 \end{wrapfigure}
 
 Applying the \emph{HITS}-algorithm to program code hubs can be colloquially described as methods, that call many other methods, and authority's can be described as methods, that implement a function.\newline
-In the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) the first graph will look very similar to the class diagram, as it is shown in \autoref{graph:HITS - before first interation}. Keeping the labelling of classes in mind, which was a mapping to the numbers $\#1-\#8$ as it is shown in \autoref{pic:freemind callgraph}, the mapping of the \textit{HITS}-Algorithm is referring to the class \#i as page $p_i$.
-After transferring it into the graph of the form of $G'$ and after the first iteration the graph looks like \autoref{graph:HITS - before first interation}. \newline \newline  
+In the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) the first graph will look very similar to the class diagram, as it is shown in \autoref{graph:HITS - before first interation}. Keeping the labeling of classes in mind, which was a mapping to the numbers $\#1-\#8$ as it is shown in \autoref{pic:freemind callgraph}, the mapping of the \textit{HITS}-Algorithm is referring to the class \#i as page $p_i$.
+After transfering it into the graph of the form of $G'$ and after the first iteration the graph looks like \autoref{graph:HITS - before first interation}. \newline \newline  
 Including the normalization the graph $G'$ looks like \autoref{graph:HITS - after first iteration}
 The normalization was done by calculating for every $H_p$ and $A_p$ of a page $p$ as:\newline
 \begin{center}
@@ -291,5 +292,5 @@ The resulting graph in \autoref{graph:HITS - after 100 iterations}, can be inter
 \begin{center}
 	$f(v) = \begin{cases} 1 \qquad ,if \ v_h>0.7\\ 1 \qquad ,if \ v_a > 0.4 \\ 0 \qquad else \end{cases}$
 \end{center}
-interpreted as $f(v)=1$ is considered relevant, with  $v\in V$ and $v_h, v_a$ being the corresponding hub-/authorityscores. Therefore the method will consider $p_3$ and $p_4$ as relevant, which is only 50\% of the pages that should be relevant as stated in \autoref{ch:Freemind Example}. The other two relevant pages $p_1$ and $p_2$ are not considered, so called \emph{false-negatives}, because of their appearance within the callgraph. $p_1$ has a very low hubscore and no authority value and $p_2$ no value at all. So the \emph{HITS-Algorithm} does not work quite well on this example because of the callgraph structure, but combining it with other techniques leads to the fact that the \emph{HITS-Algorithm} is a frequently used technique.
+The result $f(v)=1$ is considered relevant, with  $v\in V$ and $v_h, v_a$ being the corresponding hub-/authorityscores. Therefore the method will consider $p_3$ and $p_4$ as relevant, which is only 50\% of the pages that should be relevant as stated in \autoref{ch:Freemind Example}. The other two relevant pages $p_1$ and $p_2$ are not considered, so called \emph{false-negatives}, because of their appearance within the callgraph. $p_1$ has a very low hubscore and no authority value and $p_2$ no value at all. So the \emph{HITS-Algorithm} does not work quite well on this example because of the callgraph structure, but combining it with other techniques leads to the fact that the \emph{HITS-Algorithm} is a frequently used technique.
 %\clearpage
