@@ -14,7 +14,7 @@ In this chapter deals with five different feature location techniques in detail.
 		 &  &  &  technology &  &  &  \\ \hline
 		 \multirow{5}{1em}{\begin{sideways} static \end{sideways}}
 		 & Find-concept  & plain & PDA, NLP & query & AOIG & ++  \\
-		 &      &        &             & query         & documents  &   \\
+		 &      &        &             &         & documents  &   \\
 		 & SNIAFL & plain & tf-idf, LSI, & set of query's & BRCG & -/+ \\ 
 		 &        &       & PDA  &             &      &
 		 \\ 
@@ -30,6 +30,8 @@ In this chapter deals with five different feature location techniques in detail.
 	\caption{The techniques discussed further on in this paper}
 	\label{table:techniques overview}
 \end{table}
+
+In order to define if the technique is suitable for our Freemind Example(\autoref{ch:Freemind Example}) we regard the number of \textit{false-negatives} and \textit{false-positives}. A \textit{false-negative} method is a method stated relevant by the example but is not a relevant feature derive from the technique. A \textit{false-positive} is the opposite.
 
 \section{Static - Plain}
 \label{sec:find-concept}
@@ -62,10 +64,34 @@ After several steps of improving the query the final query traverses through the
 Finally the \emph{FC} is able to generate the result graph with methods matching the query as nodes and structural relations between the methods computed by the \textit{PDA}. \cite{shepherd2007using} \newline
 Due to the overhead of computing the \textit{verb-DO} pairs out of the query and the step by step improvement of the input the user interaction in Table \ref{table:techniques overview} is rated with "++".
 
+Regarding the Freemind Example of \autoref{ch:Freemind Example} the technique can\footnote{because of the different ways of extending the query the result may differ from others with the same query} result in the following. The input query, which has to be a \textit{verb-DO} pair, equals \textit{(doAutomaticSave, MindMapMapModel)}. Because of the mentioned adding of words, because of similarity or collocating the terms \textit{save} and \textit{saveInternal} may be added to the query. After performing \textit{LSI} (\autoref{sec:LSI}) the result is the callgraph looks like \autoref{graph:Find-Concept - result}.
+
+\begin{figure}
+	\centering
+	 \begin{tikzpicture}
+	\tikzset{vertex/.style = {shape=ellipse,draw,minimum size=3em}}
+	\tikzset{edge/.style = {->,> = latex'}}
+	% vertices
+	\node[vertex] (p1) at  (1,4) {\#1};
+	\node[vertex] (p2) at  (5,2) {\#2};
+	\node[vertex] (p3) at  (1,2) {\#3};
+	\node[vertex] (p4) at  (5,0) {\#4};
+	\node[vertex] (p7) at (2,0)  {\#7};
+	%edges
+	\draw[edge] (p1)  to (p3);
+	\draw[edge] (p4)  to (p2);
+	\draw[edge] (p7)  to (p3);
+	\draw[edge] (p7)  to (p4);
+	\end{tikzpicture}
+	\caption{The result graph of the \textit{Find-Concept}}
+	\label{graph:Find-Concept - result}
+\end{figure}
+The result fits the real relevant features, as mentioned in \autoref{ch:Freemind Example}, quite well by stating every relevant method as relevant and only stating \#7 as a\textit{false-positive} . The technique fits the example quite well because of the applicable assumptions towards the underlying code, like the object-oriented structure or the verb-object writing distinction.
+
 \section{Static - Guided}
 \label{sec:Dora}
 The technique presented by \emph{Emily Hill, Lori Pollock} and \emph{K. Vijay-Shanker}, professors of the \textit{University of Delaware} in  \textit{Computer and Information Science}, is named \emph{Dora the Program Explorer} (short: \emph{Dora}})\footnote{Dora comes from exploradora, the Spanish word for a female explorer\cite{hill2007exploring}. Also the name chosen in account of the children's series "\textit{Dora the Explorer}" }\cite{hill2007exploring}.
-Dora also uses a call graph $G=(V,E)$ to derive dependency, like the \emph{Find-concept} in \autoref{sec:find-concept}, but combines it with the \emph{tf-idf} ranking method explained in \autoref{sec:tf-idf} with the methods as nodes $n \in V$, it's body as the documents $d(n)$ and edges $e=(n,m) \in E$ if $n$ calls $m$. \newline
+Dora also uses a call graph $G=(V,E)$ to derive dependency, like the \emph{Find-concept} in \autoref{sec:find-concept}, but combines it with the \emph{tf-idf} ranking method explained in \autoref{sec:tf-idf} with the methods as nodes $n \in V$, it's body as the documents $d(n)$ and edges $e=(n,m) \in E$ if method $n$ calls method $m$. \newline
 As an input the user has to yield an initial query, a so called \textit{seed method} $ n_0 \in V$ the examination should start from, and a depth defining a graph-neighbourhood, which should be included in the search(i.e. a maximal distance). \newline
 Given the input, Dora proceeds by traversing through the call graph $G$ calculating how suitable the document $d(n)$ of the current node $n$ is by combining the succeeding three values:
 \begin{enumerate}
@@ -102,7 +128,8 @@ The result Dora computes is a subgraph $G'=(V',E')$ of the call graph, where $V'
 This function can be described as a colouring of every \textit{relevant} node. The final output is the coloured sub-call-graph $G'$. \newline
 \emptyLine
 In the \textit{Freemind Example} of \autoref{ch:Freemind Example} the result can look different, by changing the parameters like the \textit{seed method}, the \textit{depth} or the \textit{threshold values}.
-Simplifying the method in the fact of disregarding the method body's and by knowing that every method called in the \autoref{pic:freemind callgraph} is user made, the scores are equal to their score in \autoref{table:tfidf_table}. \newline
+\newline
+Simplifying the method in the fact of disregarding the method body's and by knowing that every method called in \autoref{pic:freemind callgraph} is user made, the scores are equal to their score in \autoref{table:tfidf_table}. \newline
 The threshold are chosen like the following:
 \begin{table}[h]
 	\centering
@@ -111,7 +138,8 @@ The threshold are chosen like the following:
 		$et = 0.1$ & methods with a score of 0.1 or higher should be explored further
 	\end{tabular}
 \end{table}
-So the final graph Dora computes looks like the \autoref{graph:Dora - result}. The green nodes are relevant to the feature, the grey nodes are explored but not relevant. The red node(\#2) is highly relevant to the feature with a \emph{tf-idf score} of 1.454, but is not explored due to the \textit{depth} of 3.
+
+So the final graph Dora computes looks like the \autoref{graph:Dora - result} with \#1 being the \textit{seed method}. The green nodes are relevant to the feature, the grey nodes are explored but not relevant. The red node(\#2) is highly relevant to the feature with a \emph{tf-idf score} of 1.454, but is not explored due to the missing path from \#1 to \#2 (with a maximum length of 3).
 \begin{figure}[h]
 	\centering
 	\begin{tikzpicture}
@@ -121,11 +149,11 @@ So the final graph Dora computes looks like the \autoref{graph:Dora - result}. T
 		\node[vertex, fill=black!30!green] (p1) at  (0,2) {\#1};
 		\node[vertex, fill=black!30!red] (p2) at  (3,2) {\#2};
 		\node[vertex, fill=gray] (p3) at  (0,0) {\#3};
-		\node[vertex, fill=gray] (p4) at  (3,0) {\#4};
+		\node[vertex, fill=white] (p4) at  (3,0) {\#4};
 		\node[vertex, fill=gray] (p5) at (-1,-1)  {\#5};
 		\node[vertex, fill=gray] (p6) at (-1,-2.5) {\#6};
-		\node[vertex, fill=gray] (p7) at (1,-1)  {\#7};
-		\node[vertex, fill=gray] (p8) at (1,-2.5) {\#8};
+		\node[vertex, fill=white] (p7) at (1,-1)  {\#7};
+		\node[vertex, fill=white] (p8) at (1,-2.5) {\#8};
 		%edges
 		\draw[edge] (p1)  to (p3);
 		\draw[edge] (p4)  to (p2);
@@ -139,13 +167,16 @@ So the final graph Dora computes looks like the \autoref{graph:Dora - result}. T
 	\caption{The result graph of \textit{Dora}, with \#1 as \textit{seed method}, \textit{depth}=3, rt=0.5 and et=0.1}
 	\label{graph:Dora - result}
 \end{figure}
+So \emph{Dora} is not a very good technique for this example because of \#2,\#3 and \#4 being \textit{false-negatives} and therefore only deriving \#1 as relevant.
+
+
  In modern cases of application the \textit{threshold}-values are chosen by a heuristic of other cases and general knowledge of the underlying program. Including the \textit{methods body} (2) and the binary value of the formulae the result can be refined by slightly changing the query or the \textit{threshold's}. \newline
 \emph{Dora} only needs a query and a \textit{depth} to compute a result, which takes to further interaction, which is marked within the \autoref{table:techniques overview} with only one "+".
 
 \section{Dynamic - Plain}
 \label{sec:Wilde}
 One of the most important dynamic plain approaches is the very first one of Norman Wilde and Michael Scully known under the term \emph{Software Reconnaissance} \cite{wilde1995software}. \textit{Software Reconnaissance} tries to define a feature $f$ by getting two sets of scenarios $S_f$ and $\overline{S_f}$ as an input and distinguishing between scenarios that invoke the feature of interest $S$ and scenarios that do not $\overline{S_f}$. \newline
-Regarding the execution traces \textit{Software Reconnaissance} categorizes methods/lines of code $M$\footnote{the degree of fineness is chosen by the user} into three groups:
+Regarding the execution traces \textit{Software Reconnaissance} categorizes methods/lines of code $M$\footnote{the degree of fineness is chosen by the user} into four groups:
 \begin{table}[h]
 	\begin{tabular}{l}
 		1. potentially involved  \\
@@ -161,10 +192,10 @@ Regarding the execution traces \textit{Software Reconnaissance} categorizes meth
 		\qquad $C = \{ m \in M | \forall s \in S_f \cup \overline{S_f}:s$ executes $m \}$ \\
 		\qquad used by every scenario (for example a \textit{main}-method)
 	\end{tabular}
-\end{table}
-The result are the first 3 lists for every feature $f$ that is set in the query and once the list of all \textit{common} components. Different versions of this technique state, that $I_2 \cap C = \emptyset$.\cite{wilde1995software} \newline
+\end{table} \newline
+The result are the first three sets for every feature $f$ that is set in the query and once the list of all \textit{common} components. Different versions of this technique state, that $I_2 \cap C = \emptyset$.\cite{wilde1995software} \newline
 \emptyLine
-In our example regarding the two features of $f_1 = automaticSaveFile$ and $f_2 = manualSaveFile$ the execution traces are quite similar owed to the fact, that the \textit{automaticSaveFile}-feature is just a not user triggered \textit{internalSave}. Keeping in mind the call graph(\autoref{pic:freemind callgraph}) methods \#3, \#5 and \#6 will be considered as \textit{common} components. Method \#1 will be considered \textit{uniquely involved} to the feature $f_1$. \newline
+In our example regarding the two features of $f_1 = automaticSaveFile$ and $f_2 = manualSaveFile$ the execution traces are quite similar owed to the fact, that the \textit{automaticSaveFile}-feature is just a not user triggered \textit{internalSave}. Keeping in mind the call graph(\autoref{pic:freemind callgraph}) methods \#3, \#5 and \#6 will be considered as \textit{common} components, because of the fact that the \textit{automatic save} feature relies on the \textit{manual save} feature. Method \#1 will be considered \textit{uniquely involved} to the feature $f_1$. Methods \#2 and \#4 are in the \textit{potentially involved} set, because not every \textit{automatic save} run uses these components. So we get no \textit{false-positive} and the if \#2 and \#4 are \textit{false-negatives} is a matter of defining these sets. Which shows that \textit{Software Reconnaissance} is a suitable technique for the Freemind Example.\newline
 \emptyLine
 This technique already requires voluminous overhead, because of the two sets of scenarios $S_f$ and $\overline{S_f}$ for every feature.
 
@@ -193,7 +224,13 @@ The technique \textit{Revelle} combines \textit{Information Retrieval}, \textit{
 	\end{itemize}
 \end{itemize} 
 The remaining set of methods get ranked by using \textit{Liu} and the final ranked list is returned to the user.
-The overall user interaction is quite sparely, because of one scenario and a query about the feature of interest and therefore rated with "+" in \autoref{table:techniques overview}. \cite{revelle2010using}
+The overall user interaction is quite sparely, because of one scenario and a query about the feature of interest have to be given as an input and therefore rated with "+" in \autoref{table:techniques overview}. \cite{revelle2010using}
+
+
+In the Freemind Example (\autoref{ch:Freemind Example}) and given a scenario, where the \textit{automaticSaveFile}-feature is executed the methods \#1,\#3, \#5 and \#6 are invoked. Scoring these using the \textit{HITS-Algorithm} of \autoref{sec:HITS} the elements receive their score in \autoref{graph:HITS - after 100 iterations}. Assuming the \textit{HITS-Algorithm} has a significant threshold \#1 will be filtered, because it's authority score of 0. \newline
+The remaining methods \#3, \#5 and \#6 are ranked by their \textit{LSI}(\autoref{sec:LSI}) score, which are presented in \autoref{table:lsi-values} with respect to the query \textit{automaticSaveFile}.\newline
+The result has regarding our example two \textit{false-positives} (\#5 and \#6) and three \textit{false-negatives} (\#1, \#2 and \#4), which makes it a technique that should not be used for the Freemind Example.
+
 
 \section{Future Technique Approaches}
 \label{sec:SNIAFL}
@@ -209,66 +246,21 @@ They define two types of functions of a feature:
 The set of \textit{specific features} is indisputable a subset of the set of \textit{ relevant features}.
 The presentation of the program within the technique is realized with a so called \textit{Branch-Reserving Call Graph (BRCG)}, which is a normal call graph expanded with branching and sequential information. These informations can be used to construct pseudo execution traces for a feature. The \textit{BRCG} can be written as $G=(V,E)$ with the nodes $V$ as a function, a branch or a return statement. Loops are defined as two branch statements: one going through the loop body and one exiting immediately.
 
-%\begin{figure}[hbt]{0.5*\textwidth}
-%	\lstset{language=Java}
-%	\lstinputlisting[
-%	label=lst:system,
-%	caption=An example code for BRCG] {src/listings/BRCG-examplecode.java}
-%\end{figure}
 
 \noindent\begin{minipage}{.35\textwidth}
+	\vspace{7em}
 	\lstset{language=Java}
 	\lstinputlisting[
 		label=lst:code,
 		caption=An example code for BRCG] {src/listings/BRCG-examplecode.java}
 \end{minipage}\hfill
 \begin{minipage}{.55\textwidth}
-%	\begin{tikzpicture}
-%		\tikzset{method/.style = {shape=circle,draw,minimum size=3em}}
-%		\tikzset{decision/.style = {shape=diamond,draw,minimum size=1em, node distance=3em}}
-%		\tikzset{sequential/.style = {shape=rectangle,draw,minimum width=4em,,node distance=2.25em}}
-%		\tikzset{branch/.style = {shape=ellipse,draw,minimum width=3em,node distance=3em}}
-%		\tikzset{edge/.style = {->,> = latex'}}
-%		
-%		\node[method] (method) at  (5,1) {func};
-%		\node[sequential, below of=method](method_sequential) {sequential};
-%		
-%		\node[method, below left = of method_sequential] (f1) {f1};
-%		\node[decision, below = of method_sequential](BS1){BS1};
-%		\node[branch, below of=BS1](BS1_branching) {branching};
-%		\node[method, below right = of method_sequential] (f6){f6};
-%		
-%		\node[method, below left = of BS1_branching] (B1) {B1};
-%		\node[sequential, below of=B1](B1_sequential) {sequential};
-%		\node[method, below right = of BS1_branching] (B2) {B2};
-%		\node[sequential, below of=B2](B2_sequential) {sequential};
-%		
-%		\node[method, below left = of B1_sequential] (f2) {f2};
-%		\node[method, below right = of B1_sequential] (exit) {exit};
-%		
-%		\node[decision, below left = of B2_sequential] (BS2) {BS2};
-%		\node[branch, below of=BS2,node distance=3em](BS2_branching) {branching};
-%		\node[method, below right = of B2_sequential] (f5) {f5};
-%	\end{tikzpicture}
-
-%	\begin{forest}
-%		method/.style = {shape=circle,draw,minimum size=3em},
-%		decision/.style = {shape=diamond,draw,minimum size=1em},
-%		sequential/.style = {shape=rectangle,draw,minimum width=4em,,node distance=2.25em},
-%		branch/.style = {shape=ellipse,draw,minimum width=3em,node distance=3em},
-%		edge/.style = {->,> = latex'}
-%		[{func},method
-%			[{f1}, method],
-%			[{BS1}, method],
-%			[{f6}, method]
-%		]
-%	\end{forest}
-	\vspace{-5em}
 	\includegraphics[width=.75\textwidth]{src/pic/BRCG-example.png}
 	\captionof{figure}{The BRCG of the example code in \autoref{lst:code} \cite{zhao2006sniafl}}
 	\label{graph:BRCG}
 	\vspace{2em}
 \end{minipage}
+
 In \autoref{graph:BRCG} is shown an example graph for the example code of \autoref{lst:code}, with $f1$ to $f6$ being function. The nodes $func, B1, B2$ and $B4$ are \textit{sequential} of code, which indicate a sequence of other nodes following, while $BS1$ and $BS2$ are \textit{branching} nodes indicating a conditional-based decision, like an if-statement or a \textit{while}-loop. $RS$ is a \textit{return}-statement and $B3$ is the automatic \textit{exit}-statement previously mentioned.\newline
 As an input the technique takes textual paragraphs for every feature, which can be derived by the requirements documentation. These paragraphs are converted into documents using the code style  like in \autoref{sec:Wilde} and normalizing\footnote{in general converting to lower case alphabetical letters} the terms. Also \textit{FCA} (\autoref{sec:FCA}) will be used to convert the methods into queries. \newline
 After deriving the documents and queries the technique uses a special \textit{LSI} variation to convert these two sets to a vector space and measure the similarity using the $cosine$. The speciality of this variation is, that the weights of the terms, defining which terms are more important than others, are not given by the user or chosen equally balanced, but are also computed using \textit{tf-idf} (\autoref{sec:tf-idf}).\newline

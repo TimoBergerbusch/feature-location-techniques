@@ -111,13 +111,14 @@ By normalizing and decomposing using a singular value decomposition the document
     $d_1$ & $d_2$ & $d_3$ & $d_4$ & $d_5$ & $d_6$ & $d_7$ & $d_8$ \\ \hline
     0.6319 & 0.8897 & -0.2034 & -0.5491 & 0.2099 & 0.2099 & -0.1739 & -0.6852 \\ \hline
   \end{tabular}
+  \label{table:lsi-values}
 \end{center}
 Like previously mentioned $d_2$ is the most similar to $q$, because of the "pointing in the same general direction", which it now proven by having the highest value $cosine(d_2,q)=0.8897=max \{ cosine(d_i,q) | d_i \in D \} $ and also $d_8$ is the least similar with a value $cosine(d_8,q)=-0.6852=min\{cosine(d_i,q) | d_i \in D\}$.
   
 \section{Term Frequency - Inverse Document Frequency (tf-idf)}
 \label{sec:tf-idf}
 The \emph{term frequency - inverse document frequency} technique is a statistical technique to derive a feature to a given intension. It measures the importance of a term or multiple terms to documents by its frequency of appearing. The terms are terms of the intension of the feature that is wanted to be analyzed. In a simple way it can be described as: "the more frequent a term occurs in the document, the more relevant the document is to the term". \newline
-This is mathematically described as the $document frequency tf=(t,d)$, counting how often the term $t$ is contained in the document $d$.
+This is mathematically described as the $document frequency$ $tf=(t,d)$, counting how often the term $t$ is contained in the document $d$.
 In the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) the term $t_2 = save$ appears in $d_3$ once and the term $t_1 = automatic$ does not appear at all so: $tf(t_2,d_3) = 1$ and $tf(t_1,d_3)=0$. \newline
 Doing that for the terms $t_1 = automatic, t_2 = save$ and $t_3 = file$ and the documents $d_1$ to $d_8$ the matrix shown in \autoref{pic:term-document-matrix} can be derived.
 The main problem of this technique is, that uninformative terms appearing within a document-set, often referred as \emph{corpus} and shortened by $D$, maybe even multiple times can distract from terms, which are mentioned less frequent but are more relevant. To compensate that, the technique relativizes by calculating how many documents contain the term and normalizing it. If it's a commonly used term shared by many documents this term ca not be taken as a measurement to differentiate between documents. Or colloquially "the more documents include a term, the less this term discriminates between documents ". \newline
@@ -152,7 +153,7 @@ Like in the example if the focus is not on one term but on a set of terms the \e
   \label{table:tfidf_table}
 \end{table}
 
-\section{Hyper Link Induced Topic Search (HITS)}
+\section{Hyperlink Induced Topic Search (HITS)}
 \label{sec:HITS}
 The \emph{Hyper Link Induced Topic Search} (short: \emph{HITS}) is a page ranking algorithm for web mining\footnote{web mining is the analysis step of the knowledge discovery in databases process within the World Wide Web CITE}, which is the counterpart of the famous \emph{Google Page Rank}-algorithm and is currently used by the \emph{Ask Search Engine} \cite{wiki:HITS}. Its basically used to get websites that correspond best to a given input, like every search engine. 
 The \emph{HITS}-algorithm distinguishes between two forms of web pages, which are not necessarily disjoint:
@@ -168,8 +169,8 @@ A hubscore is the number of authorities the hub refers to. An authorityscore is 
 Keeping the graph $G$ in mind the hub- and authority scores can be defined as the following. \newline
 \begin{center}
   \begin{tabular}{ r c l }
-    authority score of page $p$ & & $A_p=\{ \sum\nolimits_{\{ q | (q,p) \in E \} } H_q \}$ \\
-    hub score of page $p$ & & $H_p = \{ \sum\nolimits_{\{ q | (p,q) \in E \} } A_q \}$ \\
+    authority score of page $p$ & & $A_p= \sum\nolimits_{\{ q | (q,p) \in E \} } H_q $ \\
+    hub score of page $p$ & & $H_p = \sum\nolimits_{\{ q | (p,q) \in E \} } A_q $ \\
   \end{tabular}
 \end{center}
 Given the two values the graph can be rewritten as $G'=(V',E')$ with $V'=\{ (p, H_p, A_p)| \forall p\in V\}$ and $E' = E$.
@@ -180,114 +181,115 @@ By iterating over the graph the values of $H_p$ and $A_p$ are calculated for eve
     normalizing the hub score of page $p$ & & $H_p = H_p/\sqrt{\sum\nolimits_{\{(q,H_q,A_q) \} \in V'} H_q^2}$ \\
   \end{tabular}
 \end{center}
-The normalized values satisfy the condition, that $\sum\nolimits_{\{(p,H_p,A_p) \} \in V'} H_p^2 = \sum\nolimits_{\{(p,H_p,A_p) \} \in V'} A_p^2 = 1$.
+The normalized values satisfy the condition, that \newline 
+\begin{center}
+	\vspace{-2em}
+	$\sum\nolimits_{\{(p,H_p,A_p) \} \in V'} H_p^2 = \sum\nolimits_{\{(p,H_p,A_p) \} \in V'} A_p^2 = 1$.
+\end{center}
+\newpage
 
-\begin{wrapfigure}[17]{l}{0.6\textwidth}
-  \centering
+\begin{wrapfigure}[18]{h}{0.5\linewidth}
   \begin{tikzpicture}
-  \tikzset{vertex/.style = {shape=ellipse,draw,minimum size=1.5em}}
-  \tikzset{edge/.style = {->,> = latex'}}
-  % vertices
-  \node[vertex] (p1) at  (1,4) {($p_1$, 1, 0)};
-  \node[vertex] (p2) at  (5,2) {($p_2$, 0, 1)};
-  \node[vertex] (p3) at  (1,2) {($p_3$, 1, 2)};
-  \node[vertex] (p4) at  (5,0) {($p_4$, 1, 2)};
-  \node[vertex] (p5) at (-1,0)  {($p_5$, 1, 1)};
-  \node[vertex] (p6) at (-1,-2) {($p_6$, 0, 1)};
-  \node[vertex] (p7) at (2,0)  {($p_7$, 2, 1)};
-  \node[vertex] (p8) at (2,-2) {($p_8$, 2, 0)};
-  %edges
-  \draw[edge] (p1)  to (p3);
-  \draw[edge] (p4)  to (p2);
-  \draw[edge] (p7)  to (p3);
-  \draw[edge] (p3)  to (p5);
-  \draw[edge] (p5)  to (p6);
-  \draw[edge] (p7)  to (p4);
-  \draw[edge] (p8)  to (p4);
-  \draw[edge] (p8)  to (p7);
+	  \tikzset{vertex/.style = {shape=ellipse,draw,minimum size=3em}}
+	  \tikzset{edge/.style = {->,> = latex'}}
+	  % vertices
+	  \node[vertex] (p1) at  (1,4) {($p_1$, 1, 0)};
+	  \node[vertex] (p2) at  (5,2) {($p_2$, 0, 1)};
+	  \node[vertex] (p3) at  (1,2) {($p_3$, 1, 2)};
+	  \node[vertex] (p4) at  (5,0) {($p_4$, 1, 2)};
+	  \node[vertex] (p5) at (-1,0)  {($p_5$, 1, 1)};
+	  \node[vertex] (p6) at (-1,-2) {($p_6$, 0, 1)};
+	  \node[vertex] (p7) at (2,0)  {($p_7$, 2, 1)};
+	  \node[vertex] (p8) at (2,-2) {($p_8$, 2, 0)};
+	  %edges
+	  \draw[edge] (p1)  to (p3);
+	  \draw[edge] (p4)  to (p2);
+	  \draw[edge] (p7)  to (p3);
+	  \draw[edge] (p3)  to (p5);
+	  \draw[edge] (p5)  to (p6);
+	  \draw[edge] (p7)  to (p4);
+	  \draw[edge] (p8)  to (p4);
+	  \draw[edge] (p8)  to (p7);
   \end{tikzpicture}
-  \caption{The graph G}
+  \caption{The graph G after the first iteration without normalizing}
   \label{graph:HITS - before first interation}
 \end{wrapfigure}
 
 Applying the \emph{HITS}-algorithm to program code hubs can be colloquially described as methods, that call many other methods, and authority's can be described as methods, that implement a function.\newline
 In the \textit{Freemind-Example} (\autoref{ch:Freemind Example}) the first graph will look very similar to the class diagram, as it is shown in \autoref{graph:HITS - before first interation}. Keeping the labelling of classes in mind, which was a mapping to the numbers $\#1-\#8$ as it is shown in \autoref{pic:freemind callgraph}, the mapping of the \textit{HITS}-Algorithm is referring to the class \#i as page $p_i$.
-After transferring it into the graph of the form of $G'$ and after the first iteration the graph looks like \autoref{graph:HITS - before first interation}. \newline
-Including the normalization the graph $G'$ looks like \autoref{graph:HITS - after first iteration}. The normalization was done by calculating for every $H_p$ and $A_p$ of a page $p$ as:\newline
+After transferring it into the graph of the form of $G'$ and after the first iteration the graph looks like \autoref{graph:HITS - before first interation}. \newline \newline  
+Including the normalization the graph $G'$ looks like \autoref{graph:HITS - after first iteration}
+The normalization was done by calculating for every $H_p$ and $A_p$ of a page $p$ as:\newline
 \begin{center}
-  \begin{tabular}{ r c l }
-    $H_p$ & = &$H_p / \sqrt{1^2+0^2+1^2+1^2+1^2+2^2+0^2+2^2} = H_p/ \sqrt{12}$ and \\
-  $A_p$ & = &$ A_p / \sqrt{0^2+1^2+2^2+2^2+1^2+1^2+1^2+0^2} = A_p/ \sqrt{12}$. \\
-  \end{tabular}
-\end{center}  
-  
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-  \tikzset{vertex/.style = {shape=ellipse,draw,minimum size=1em}}
-  \tikzset{edge/.style = {->,> = latex'}}
-  % vertices
-  \node[vertex] (p1) at  (1,4) {($p_1$, $\frac{1}{\sqrt12}$, 0)};
-  \node[vertex] (p2) at  (8,2) {($p_2$, 0, $\frac{1}{\sqrt12}$)};
-  \node[vertex] (p3) at  (1,2) {($p_3$, $\frac{1}{\sqrt12}$, $\frac{2}{\sqrt12}$)};
-  \node[vertex] (p4) at  (8,0) {($p_4$, $\frac{1}{\sqrt12}$, $\frac{2}{\sqrt12}$)};
-  \node[vertex] (p5) at  (-2,0) {($p_5$, $\frac{1}{\sqrt12}$, $\frac{1}{\sqrt12}$)};
-  \node[vertex] (p6) at  (-2,-2) {($p_6$, 0, $\frac{1}{\sqrt12}$)};
-  \node[vertex] (p7) at  (3,0) {($p_7$, $\frac{2}{\sqrt12}$, $\frac{1}{\sqrt12}$)};
-  \node[vertex] (p8) at  (3,-2) {($p_8$, $\frac{2}{\sqrt12}$, 0)};
-  %edges
-  \draw[edge] (p1)  to (p3);
-  \draw[edge] (p4)  to (p2);
-  \draw[edge] (p7)  to (p3);
-  \draw[edge] (p3)  to (p5);
-  \draw[edge] (p5)  to (p6);
-  \draw[edge] (p7)  to (p4);
-  \draw[edge] (p8)  to (p4);
-  \draw[edge] (p8)  to (p7);
-  \end{tikzpicture}
-  \caption{G' after the first iteration with normalizing the scores}
-  \label{graph:HITS - after first iteration}
+  	\vspace{-2em}
+  	\begin{tabular}{ r c l }
+  		$H_p$ & = &$H_p / \sqrt{1^2+0^2+1^2+1^2+1^2+2^2+0^2+2^2} = H_p/ \sqrt{12}$ and \\
+  		$A_p$ & = &$ A_p / \sqrt{0^2+1^2+2^2+2^2+1^2+1^2+1^2+0^2} = A_p/ \sqrt{12}$. \\
+	\end{tabular}
+\end{center} 
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\tikzset{vertex/.style = {shape=ellipse,draw,minimum size=3em}}
+		\tikzset{edge/.style = {->,> = latex'}}
+		% vertices
+		\node[vertex] (p1) at  (1,4) {($p_1$, $\frac{1}{\sqrt12}$, 0)};
+		\node[vertex] (p2) at  (6,2) {($p_2$, $\frac{1}{\sqrt12}$)};
+		\node[vertex] (p3) at  (1,2) {($p_3$, $\frac{1}{\sqrt12}$, $\frac{2}{\sqrt12}$)};
+		\node[vertex] (p4) at  (6,0) {($p_4$, $\frac{1}{\sqrt12}$, $\frac{2}{\sqrt12}$)};
+		\node[vertex] (p5) at (-2,0)  {($p_5$, $\frac{1}{\sqrt12}$, $\frac{1}{\sqrt12}$)};
+		\node[vertex] (p6) at (-2,-2) {($p_6$, 0, $\frac{1}{\sqrt12}$)};
+		\node[vertex] (p7) at (2,0)  {($p_7$, $\frac{2}{\sqrt12}$, $\frac{1}{\sqrt12}$)};
+		\node[vertex] (p8) at (2,-2) {($p_8$, $\frac{2}{\sqrt12}$, 0)};
+		%edges
+		\draw[edge] (p1)  to (p3);
+		\draw[edge] (p4)  to (p2);
+		\draw[edge] (p7)  to (p3);
+		\draw[edge] (p3)  to (p5);
+		\draw[edge] (p5)  to (p6);
+		\draw[edge] (p7)  to (p4);
+		\draw[edge] (p8)  to (p4);
+		\draw[edge] (p8)  to (p7);
+	\end{tikzpicture}
+	\caption{The graph G' after normalizing the hub- and authorityscores}
+	\label{graph:HITS - after first iteration}
+\end{figure}
+\newpage
+
+
+The final HITS-Graph can be derived as the HITS-graph G from \autoref{graph:HITS - before first interation} iterating for 12 times. In this example after the 12th iteration the values of the pages will not change. The resulting graph is shown in \autoref{graph:HITS - after 100 iterations}. The threshold to consider if a page is relevant or not is in most cases a weighted sum of the hub- and authority score. The common way to interpret the scores is by saying, that pages with high authorityscores implement feature related functions and high hubscores coordinate feature implementing functions.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\tikzset{vertex/.style = {shape=ellipse,draw,minimum size=3em}}
+	\tikzset{edge/.style = {->,> = latex'}}
+	% vertices
+	\node[vertex] (p1) at  (1,4) {($p_1$, 0.328, 0)};
+	\node[vertex] (p2) at  (8,2) {($p_2$, 0, 0)};
+	\node[vertex] (p3) at  (1,2) {($p_3$, 0, 0.591)};
+	\node[vertex] (p4) at  (8,0) {($p_4$, 0, 0.737)};
+	\node[vertex] (p5) at  (-2,0) {($p_5$, 0, 0)};
+	\node[vertex] (p6) at  (-2,-2) {($p_6$, 0, 0)};
+	\node[vertex] (p7) at  (3,0) {($p_7$, 0.737, 0.328)};
+	\node[vertex] (p8) at  (3,-2) {($p_8$, 0.591, 0)};
+	%edges
+	\draw[edge] (p1)  to (p3);
+	\draw[edge] (p4)  to (p2);
+	\draw[edge] (p7)  to (p3);
+	\draw[edge] (p3)  to (p5);
+	\draw[edge] (p5)  to (p6);
+	\draw[edge] (p7)  to (p4);
+	\draw[edge] (p8)  to (p4);
+	\draw[edge] (p8)  to (p7);
+	\end{tikzpicture}
+	\caption{G' after 12 iteration steps and only in the last step rounded values}
+	\label{graph:HITS - after 100 iterations}
 \end{figure}
 
+The resulting graph in \autoref{graph:HITS - after 100 iterations}, can be interpreted by a function:
+\begin{center}
+	$f(v) = \begin{cases} 1 \qquad ,if \ v_h>0.7\\ 1 \qquad ,if \ v_a > 0.4 \\ 0 \qquad else \end{cases}$
+\end{center}
+interpreted as $f(v)=1$ is considered relevant, with  $v\in V$ and $v_h, v_a$ being the corresponding hub-/authorityscores. Therefore the method will consider $p_3$ and $p_4$ as relevant, which is only 50\% of the pages that should be relevant as stated in \autoref{ch:Freemind Example}. The other two relevant pages $p_1$ and $p_2$ are not considered, so called \emph{false-negatives}, because of their appearance within the callgraph. $p_1$ has a very low hubscore and no authority value and $p_2$ no value at all. So the \emph{HITS-Algorithm} does not work quite well on this example because of the callgraph structure, but combining it with other techniques leads to the fact that the \emph{HITS-Algorithm} is a frequently used technique.
 %\clearpage
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
